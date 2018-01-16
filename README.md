@@ -8,7 +8,7 @@
 ## Работа в процессе
 
 Перевод `GRBE` находится в процессе.
-Если вы заинтересованы в этом проекте и хотите помочь - смотрите [Contributing](https://github.com/ruRust/gtk-rust-by-example/CONTRIBUTING.md).
+Если вы заинтересованы в этом проекте и хотите помочь - смотрите [Contributing](https://github.com/ruRust/gtk-rust-by-example/blob/master/CONTRIBUTING.md).
 
 ## Использование
 
