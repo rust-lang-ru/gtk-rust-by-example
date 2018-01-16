@@ -1,0 +1,8 @@
+[book]
+title = "Gtk-Rust by Example"
+description = "A description"
+author = "N.Ritchie && Community"
+
+[output.html.playpen]
+editable = false
+editor = "ace"

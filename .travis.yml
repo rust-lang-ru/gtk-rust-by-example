@@ -1,0 +1,12 @@
+sudo: false
+language: rust
+cache: cargo
+rust:
+  - stable
+branches:
+  only:
+  - master
+before_script:
+  - (cargo install mdbook --force || true)
+script:
+  - mdbook build
