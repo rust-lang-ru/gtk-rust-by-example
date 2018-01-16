@@ -31,5 +31,5 @@ $ mdbook build && mdbook serve
 
 `Gtk-Rust на примерах` распространяется по двойной лицензии: лицензия [Apache][apache] 2.0 и лицензия [MIT][mit].
 
-[apache]: https://github.com/ruRust/gtk-rust-by-example/LICENSE-APACHE.md
-[mit]: https://github.com/ruRust/gtk-rust-by-example/LICENSE-MIT.md
+[apache]: https://github.com/ruRust/gtk-rust-by-example/blob/master/LICENSE-APACHE
+[mit]: https://github.com/ruRust/gtk-rust-by-example/blob/master/LICENSE-MIT.md
