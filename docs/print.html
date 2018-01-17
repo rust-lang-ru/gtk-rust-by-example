@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Коробки, кнопки и метки</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -123,7 +123,7 @@ pub struct Application {
 #fn main() {
 // Объявим структуру `Header`.
 pub struct Header {
-    container: HeaderBar,
+    pub container: HeaderBar,
 }
 #}</code></pre></pre>
 <a class="header" href="print.html#Создание-пользовательского-интерфейса-ui" id="Создание-пользовательского-интерфейса-ui"><h2>Создание пользовательского интерфейса (UI)</h2></a>
@@ -206,6 +206,31 @@ impl Header {
 </code></pre>
 <p><img src="img/hello_world.png" /></p>
 <a class="header" href="print.html#Боксирующие-кнопки" id="Боксирующие-кнопки"><h1>Боксирующие кнопки</h1></a>
+<p><img src="images/btn_boxer.png" /></p>
+<blockquote>
+<p>Исходный код программы для этой главы можно найти <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/button_boxer">здесь</a>.</p>
+</blockquote>
+<p>В этом разделе мы рассмотрим, как структурировать Ваш UI с помощью <code>коробок</code>(box), изменять <code>метку</code>(label) и запрограммировать нажатие по кнопке. А также, к концу вы поймёте, как:</p>
+<ol>
+<li>Добавлять дочерние элементы в панель заголовка;</li>
+<li>Добавлять классы стилей к кнопке;</li>
+<li>Управлять состоянием приложения с помощью атомарных счётчиков <strong>Arc</strong> и выравнивать виджеты внутри контейнера.</li>
+</ol>
+<blockquote>
+<p>Напомним, что каждый GTK объект, который можно получить из контейнера <strong>gtk</strong> - заворачивают,
+так что не стоит беспокоится о правилах заимствования Rust. Объекты GTK считают ссылки,
+поэтому, когда вам нужно передать GTK объект через несколько замыканий, вы можете
+сделать это с помощью клонирования новой ссылки.</p>
+</blockquote>
+<a class="header" href="print.html#Необходимые-знания" id="Необходимые-знания"><h2>Необходимые знания</h2></a>
+<p>Прежде чем продолжить изучение урока, убедитесь что вы понимаете что такое атомарность и атомарный счётчик ссылок (<strong>Arc</strong>). Эти понятия критически важны для возможности разделять состояние между несколькими замыканиями или потоками.
+Изучить этот вопрос можно в документации модулей <code>std::sync</code> и <code>std::sync::atomic</code>. Так же, вы можете ознакомиться с безблокировочной конкурентностью (lockless concurrency) <a href="https://assets.bitbashing.io/papers/lockless.pdf">в этом документе</a>.</p>
+<a class="header" href="print.html#Коробки-кнопки-и-метки" id="Коробки-кнопки-и-метки"><h1>Коробки, кнопки и метки</h1></a>
+<p>Цель этого раздела заключается в том, чтобы дать объяснение объектам, которые будут использованы до того, как мы применим их на практике в следующих разделах.</p>
+<a class="header" href="print.html#gtkbox" id="gtkbox"><h2>GtkBox</h2></a>
+<p><strong>GtkBox</strong> является фактически эквивалентом UI вектора в Rust и должен быть объявлен с помощью <strong>Orientation</strong>, который определяет, что должны ли элементы быть выровнены слева направо или сверху вниз. Для тех, кто имеет опыт разработки с современным дизайном HTML5/CSS3, <strong>GtkBox</strong> эквивалентен гибким коробкам -- они могут расширяться на всё пространство и виджеты, содержащиеся внутри, тоже могут расширяться в соответствии с правилами, применяемыми при дочерней упаковке.</p>
+<a class="header" href="print.html#Создание-коробки" id="Создание-коробки"><h2>Создание коробки</h2></a>
+<p>В следующем примере, a horizontal and vertical box will be created with 0 padding between children contained within the box. Once you have created your box, you can assign widgets to the box using the <code>pack_*</code> methods.</p>
 
                 </div>
 

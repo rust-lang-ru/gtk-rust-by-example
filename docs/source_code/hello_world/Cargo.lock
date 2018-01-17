@@ -201,6 +201,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "hello_world"
+version = "0.1.0"
+dependencies = [
+ "gtk 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "lazy_static"
 version = "0.2.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -239,13 +246,6 @@ dependencies = [
 name = "pkg-config"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-
-[[package]]
-name = "simple"
-version = "0.1.0"
-dependencies = [
- "gtk 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
-]
 
 [[package]]
 name = "winapi"

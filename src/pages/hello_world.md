@@ -32,7 +32,7 @@ pub struct Application {
 ```rust
 // Объявим структуру `Header`.
 pub struct Header {
-    container: HeaderBar,
+    pub container: HeaderBar,
 }
 ``` 
 

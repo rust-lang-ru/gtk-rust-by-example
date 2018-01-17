@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html" class="active"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html" class="active"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Коробки, кнопки и метки</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -116,7 +116,7 @@ pub struct Application {
 #fn main() {
 // Объявим структуру `Header`.
 pub struct Header {
-    container: HeaderBar,
+    pub container: HeaderBar,
 }
 #}</code></pre></pre>
 <a class="header" href="pages/hello_world.html#Создание-пользовательского-интерфейса-ui" id="Создание-пользовательского-интерфейса-ui"><h2>Создание пользовательского интерфейса (UI)</h2></a>

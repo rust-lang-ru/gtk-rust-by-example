@@ -10,7 +10,7 @@ pub struct Application {
 
 // Объявим структуру `Header`.
 pub struct Header {
-    container: HeaderBar,
+    pub container: HeaderBar,
 }
 
 // Блок реализации.
