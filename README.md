@@ -1,5 +1,9 @@
 # GRBE — Gtk-Rust на примерах
 
+[![Build Status](https://travis-ci.org/ruRust/gtk-rust-by-example.svg?branch=master)](https://travis-ci.org/ruRust/gtk-rust-by-example) [![][License]](#Лицензия)
+
+[License]: https://img.shields.io/crates/l/rustc-serialize.svg
+
 Изучайте разработку GUI приложений вместе в библиотекой [GTK][gtk] на языке программирования [Rust][rust].
 
 [rust]: https://www.rust-lang.org/ru-RU/
