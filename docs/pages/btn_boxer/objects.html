@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Коробки, кнопки и метки - Gtk-Rust by Example</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A description">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="../../">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html" class="active"><strong>2.1.</strong> Коробки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Gtk-Rust by Example</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="./pages/btn_boxer/objects.html#Коробки-кнопки-и-метки" id="Коробки-кнопки-и-метки"><h1>Коробки, кнопки и метки</h1></a>
+<p>Цель этого раздела заключается в том, чтобы дать объяснение объектам, которые будут использованы до того, как мы применим их на практике в следующих разделах.</p>
+<a class="header" href="./pages/btn_boxer/objects.html#gtkbox" id="gtkbox"><h2>GtkBox</h2></a>
+<p><strong>GtkBox</strong> является фактически эквивалентом UI вектора в Rust и должена быть объявлена с помощью <strong>Orientation</strong>, который определяет, что должны ли элементы быть выровнены слева направо или сверху вниз. Для тех, кто имеет опыт разработки с современным дизайном HTML5/CSS3, <strong>GtkBox</strong> эквивалентен гибким коробкам -- они могут расширяться на всё пространство, а виджеты, содержащиеся внутри, тоже могут расширяться в соответствии с правилами, применяемыми при дочерней упаковке.</p>
+<a class="header" href="./pages/btn_boxer/objects.html#Создание-коробки" id="Создание-коробки"><h2>Создание коробки</h2></a>
+<p>В следующем примере, мы создадим горизонтальную и вертикальную коробку с нулевым отступом между дочерними элементами, содержащимися в коробке. После создания коробки, вы можете задать виджеты, ипсользуя метод <code>pack_*</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let padding_between_children = 0;
+let horizontal_box = Box::new(Orientation::Horizontal, padding_between_children);
+let vertical_box = Box::new(Orientation::Vertical, padding_between_children);
+#}</code></pre></pre>
+<a class="header" href="./pages/btn_boxer/objects.html#Упаковка-коробки" id="Упаковка-коробки"><h2>Упаковка коробки</h2></a>
+<p>Вы могли заметить, что метод <code>pack_*</code> принимает большое количество параметров. Первым параметром должна быть ссылка на виджет, которую вы добавляете в контейнер. Вторым и третьим параметрами объявляют параметры заполнения соответственно. Последним параметром объявляют - как много единиц пространства должно быть между дочерними элементами в коробке.</p>
+<blockquote>
+<p>To further elaborate on the expand and fill parameters, expand defines whether the
+given widget should attempt to use all of the extra space that it can. Each widget that has
+the expand parameter set will equally share that extra space. Meanwhile, fill defines whether
+the extra spaced should actually have that widget fill to cover that extra space, or should
+merely use that extra space as padding.</p>
+</blockquote>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+health_info.pack_start(&amp;health_label, false, false, 5);
+health_info.pack_start(&amp;health, true, true, 5);
+#}</code></pre></pre>
+<a class="header" href="./pages/btn_boxer/objects.html#gtklabel" id="gtklabel"><h2>GtkLabel</h2></a>
+<p><strong>GtkLabel</strong> - это простой виджет, который состоит исключительно из текста. Название говорит само за себя. Всё, что вам нужно запомнить - это как создать метку(label) и изменить её.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let information_label = Label::new(&quot;Specific Information: &quot;);
+let value = Label::new(&quot;Linux&quot;);
+value.set_label(&quot;Redox&quot;);
+
+let horizontal_box = Box::new(Orientation::Horizontal, 5);
+horizontal_box.pack_start(&amp;information_label, false, false, 0);
+horizontal_box.pack_start(&amp;value, true, false, 0);
+#}</code></pre></pre>
+<a class="header" href="./pages/btn_boxer/objects.html#gtkbutton" id="gtkbutton"><h2>GtkButton</h2></a>
+<a class="header" href="./pages/btn_boxer/objects.html#Создание-кнопок" id="Создание-кнопок"><h3>Создание кнопок</h3></a>
+<p><strong>GtkButton</strong> - это простая кнопка, содержащая текстовую метку(label) и/или изображения для представления действия, которое должно быть выполнено при нажатии кнопки.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let text_button = Button::new_with_label(&quot;Ok&quot;);
+let image_button = Button::new_from_icon_name(&quot;имя-иконки&quot;, 32);
+#}</code></pre></pre>
+<a class="header" href="./pages/btn_boxer/objects.html#Дизайн-кнопок" id="Дизайн-кнопок"><h3>Дизайн кнопок</h3></a>
+<p>Виджеты в GTK можно оформить так, чтобы они отличались от других виджетов в пользовательском интерфейсе(UI). В частности, кнопки поддерживают два класса стилей: destructive-action, and suggested-action. Если в вашем UI есть особенная кнопка, которая должна отличаться, вы можете установить её так:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Добавьте соответствующие классы стилей к этим кнопкам.
+delete_button.get_style_context().map(|c| c.add_class(&quot;destructive-action&quot;));
+new_button.get_style_context().map(|c| c.add_class(&quot;suggested-action&quot;));
+#}</code></pre></pre>
+<p>Каждый <strong>GtkWidget</strong> предоставляет метод <strong>get_style_context()</strong>, который возвращает
+<strong>Option<StyleContext></strong>, тем самым предоставляя метод <strong>add_class()</strong>, который используется чтобы установить класс стиля. Понимаете это? Хорошо. Наиболее важные классы кнопок, которые нужно знать - это <code>destructive-action</code> и <code>suggested-action</code>. Как правило, destructive action окрашивает кнопку в красный цвет, между тем, suggested action использует синий цвет. Актуальный цвет будет зависеть от того, какая тема GTK используется вами.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="./pages/btn_boxer/index.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="./pages/btn_boxer/state.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="./pages/btn_boxer/index.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="./pages/btn_boxer/state.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

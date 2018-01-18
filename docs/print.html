@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Коробки, кнопки и метки</a></li></ul></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Коробки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -206,7 +206,7 @@ impl Header {
 </code></pre>
 <p><img src="img/hello_world.png" /></p>
 <a class="header" href="print.html#Боксирующие-кнопки" id="Боксирующие-кнопки"><h1>Боксирующие кнопки</h1></a>
-<p><img src="images/btn_boxer.png" /></p>
+<p><img src="img/btn_boxer.png" /></p>
 <blockquote>
 <p>Исходный код программы для этой главы можно найти <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/button_boxer">здесь</a>.</p>
 </blockquote>
@@ -228,9 +228,98 @@ impl Header {
 <a class="header" href="print.html#Коробки-кнопки-и-метки" id="Коробки-кнопки-и-метки"><h1>Коробки, кнопки и метки</h1></a>
 <p>Цель этого раздела заключается в том, чтобы дать объяснение объектам, которые будут использованы до того, как мы применим их на практике в следующих разделах.</p>
 <a class="header" href="print.html#gtkbox" id="gtkbox"><h2>GtkBox</h2></a>
-<p><strong>GtkBox</strong> является фактически эквивалентом UI вектора в Rust и должен быть объявлен с помощью <strong>Orientation</strong>, который определяет, что должны ли элементы быть выровнены слева направо или сверху вниз. Для тех, кто имеет опыт разработки с современным дизайном HTML5/CSS3, <strong>GtkBox</strong> эквивалентен гибким коробкам -- они могут расширяться на всё пространство и виджеты, содержащиеся внутри, тоже могут расширяться в соответствии с правилами, применяемыми при дочерней упаковке.</p>
+<p><strong>GtkBox</strong> является фактически эквивалентом UI вектора в Rust и должена быть объявлена с помощью <strong>Orientation</strong>, который определяет, что должны ли элементы быть выровнены слева направо или сверху вниз. Для тех, кто имеет опыт разработки с современным дизайном HTML5/CSS3, <strong>GtkBox</strong> эквивалентен гибким коробкам -- они могут расширяться на всё пространство, а виджеты, содержащиеся внутри, тоже могут расширяться в соответствии с правилами, применяемыми при дочерней упаковке.</p>
 <a class="header" href="print.html#Создание-коробки" id="Создание-коробки"><h2>Создание коробки</h2></a>
-<p>В следующем примере, a horizontal and vertical box will be created with 0 padding between children contained within the box. Once you have created your box, you can assign widgets to the box using the <code>pack_*</code> methods.</p>
+<p>В следующем примере, мы создадим горизонтальную и вертикальную коробку с нулевым отступом между дочерними элементами, содержащимися в коробке. После создания коробки, вы можете задать виджеты, ипсользуя метод <code>pack_*</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let padding_between_children = 0;
+let horizontal_box = Box::new(Orientation::Horizontal, padding_between_children);
+let vertical_box = Box::new(Orientation::Vertical, padding_between_children);
+#}</code></pre></pre>
+<a class="header" href="print.html#Упаковка-коробки" id="Упаковка-коробки"><h2>Упаковка коробки</h2></a>
+<p>Вы могли заметить, что метод <code>pack_*</code> принимает большое количество параметров. Первым параметром должна быть ссылка на виджет, которую вы добавляете в контейнер. Вторым и третьим параметрами объявляют параметры заполнения соответственно. Последним параметром объявляют - как много единиц пространства должно быть между дочерними элементами в коробке.</p>
+<blockquote>
+<p>To further elaborate on the expand and fill parameters, expand defines whether the
+given widget should attempt to use all of the extra space that it can. Each widget that has
+the expand parameter set will equally share that extra space. Meanwhile, fill defines whether
+the extra spaced should actually have that widget fill to cover that extra space, or should
+merely use that extra space as padding.</p>
+</blockquote>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+health_info.pack_start(&amp;health_label, false, false, 5);
+health_info.pack_start(&amp;health, true, true, 5);
+#}</code></pre></pre>
+<a class="header" href="print.html#gtklabel" id="gtklabel"><h2>GtkLabel</h2></a>
+<p><strong>GtkLabel</strong> - это простой виджет, который состоит исключительно из текста. Название говорит само за себя. Всё, что вам нужно запомнить - это как создать метку(label) и изменить её.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let information_label = Label::new(&quot;Specific Information: &quot;);
+let value = Label::new(&quot;Linux&quot;);
+value.set_label(&quot;Redox&quot;);
+
+let horizontal_box = Box::new(Orientation::Horizontal, 5);
+horizontal_box.pack_start(&amp;information_label, false, false, 0);
+horizontal_box.pack_start(&amp;value, true, false, 0);
+#}</code></pre></pre>
+<a class="header" href="print.html#gtkbutton" id="gtkbutton"><h2>GtkButton</h2></a>
+<a class="header" href="print.html#Создание-кнопок" id="Создание-кнопок"><h3>Создание кнопок</h3></a>
+<p><strong>GtkButton</strong> - это простая кнопка, содержащая текстовую метку(label) и/или изображения для представления действия, которое должно быть выполнено при нажатии кнопки.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let text_button = Button::new_with_label(&quot;Ok&quot;);
+let image_button = Button::new_from_icon_name(&quot;имя-иконки&quot;, 32);
+#}</code></pre></pre>
+<a class="header" href="print.html#Дизайн-кнопок" id="Дизайн-кнопок"><h3>Дизайн кнопок</h3></a>
+<p>Виджеты в GTK можно оформить так, чтобы они отличались от других виджетов в пользовательском интерфейсе(UI). В частности, кнопки поддерживают два класса стилей: destructive-action, and suggested-action. Если в вашем UI есть особенная кнопка, которая должна отличаться, вы можете установить её так:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Добавьте соответствующие классы стилей к этим кнопкам.
+delete_button.get_style_context().map(|c| c.add_class(&quot;destructive-action&quot;));
+new_button.get_style_context().map(|c| c.add_class(&quot;suggested-action&quot;));
+#}</code></pre></pre>
+<p>Каждый <strong>GtkWidget</strong> предоставляет метод <strong>get_style_context()</strong>, который возвращает
+<strong>Option<StyleContext></strong>, тем самым предоставляя метод <strong>add_class()</strong>, который используется чтобы установить класс стиля. Понимаете это? Хорошо. Наиболее важные классы кнопок, которые нужно знать - это <code>destructive-action</code> и <code>suggested-action</code>. Как правило, destructive action окрашивает кнопку в красный цвет, между тем, suggested action использует синий цвет. Актуальный цвет будет зависеть от того, какая тема GTK используется вами.</p>
+<a class="header" href="print.html#Сопровождение-внешнего-состояния" id="Сопровождение-внешнего-состояния"><h1>Сопровождение внешнего состояния</h1></a>
+<p>В этой главе у нас будет некоторое состояние, которым мы будем управлять с помощью UI. Поэтому, нам необходим способ хранения и загрузки значения из этого состояния. Программа, которую мы хотим написать, имеет один компонент: значение здоровья.</p>
+<p>Как оказалось, мы может напряму воспользоваться атомарными примитивами, таким как <strong>AtomicUsize</strong>, чтобы хранить значение для совместного использования нескольких неизменяемых замыканий. This
+atomic value can be manipulated without requiring mutable access to the inner value. So this
+can be passed around through an immutable borrow, and modified while being immutably borrowed
+at multiple locations.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+pub struct HealthComponent(AtomicUsize);
+#}</code></pre></pre>
+<p>While we are at it, we can go ahead and abstract some logic to this component by implementing
+some useful methods for initializing the health, subtracting health, and healing health.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl HealthComponent {
+    fn new(initial: usize) -&gt; HealthComponent { HealthComponent(AtomicUsize::new(initial)) }
+
+    fn get_health(&amp;self) -&gt; usize { self.0.load(Ordering::SeqCst) }
+
+    fn subtract(&amp;self, value: usize) -&gt; usize {
+        let current = self.0.load(Ordering::SeqCst);
+        let new = if current &lt; value { 0 } else { current - value };
+        self.0.store(new, Ordering::SeqCst);
+        new
+    }
+
+    fn heal(&amp;self, value: usize) -&gt; usize {
+        let original = self.0.fetch_add(value, Ordering::SeqCst);
+        original + value
+    }
+}
+#}</code></pre></pre>
 
                 </div>
 
@@ -257,20 +346,6 @@ impl Header {
 
         <!-- Livereload script (if served using the cli tool) -->
         
-    <script type="text/javascript">
-        var socket = new WebSocket("ws://localhost:3001");
-        socket.onmessage = function (event) {
-            if (event.data === "reload") {
-                socket.close();
-                location.reload(true); // force reload from server (not from cache)
-            }
-        };
-
-        window.onbeforeunload = function() {
-            socket.close();
-        }
-    </script>
-
 
         
 

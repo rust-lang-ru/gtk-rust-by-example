@@ -2,11 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Введение - Gtk-Rust by Example</title>
+        <title>Сопровождение внешнего состояния - Gtk-Rust by Example</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="A description">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <base href="../../">
 
         <link rel="stylesheet" href="book.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
@@ -62,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html" class="active">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Коробки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li></ul></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Коробки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html" class="active"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -85,33 +86,60 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="pages/index.html#gtk-rust-на-примерах" id="gtk-rust-на-примерах"><h1>Gtk-Rust на примерах</h1></a>
-<p>Gtk-Rust by Example (GRBE) представляет собой неофициальную книгу по разработке GTK GUI, на <a href="https://www.rust-lang.org/ru-RU/">языке программирования Rust</a>, которая будет демонстрировать практическое использование <a href="https://github.com/gtk-rs/gtk/">библиотеки GTK</a> на различных примерах.</p>
-<p>Перед тем как начать, укажите версию библиотеки в вашем <code>Cargo.toml</code> файле:</p>
-<pre><code>[dependencies.gtk]
-version = &quot;0.3.0&quot;
-features = [&quot;v3_22&quot;]
-</code></pre>
+                    <a class="header" href="./pages/btn_boxer/state.html#Сопровождение-внешнего-состояния" id="Сопровождение-внешнего-состояния"><h1>Сопровождение внешнего состояния</h1></a>
+<p>В этой главе у нас будет некоторое состояние, которым мы будем управлять с помощью UI. Поэтому, нам необходим способ хранения и загрузки значения из этого состояния. Программа, которую мы хотим написать, имеет один компонент: значение здоровья.</p>
+<p>Как оказалось, мы может напряму воспользоваться атомарными примитивами, таким как <strong>AtomicUsize</strong>, чтобы хранить значение для совместного использования нескольких неизменяемых замыканий. This
+atomic value can be manipulated without requiring mutable access to the inner value. So this
+can be passed around through an immutable borrow, and modified while being immutably borrowed
+at multiple locations.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+pub struct HealthComponent(AtomicUsize);
+#}</code></pre></pre>
+<p>While we are at it, we can go ahead and abstract some logic to this component by implementing
+some useful methods for initializing the health, subtracting health, and healing health.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl HealthComponent {
+    fn new(initial: usize) -&gt; HealthComponent { HealthComponent(AtomicUsize::new(initial)) }
+
+    fn get_health(&amp;self) -&gt; usize { self.0.load(Ordering::SeqCst) }
+
+    fn subtract(&amp;self, value: usize) -&gt; usize {
+        let current = self.0.load(Ordering::SeqCst);
+        let new = if current &lt; value { 0 } else { current - value };
+        self.0.store(new, Ordering::SeqCst);
+        new
+    }
+
+    fn heal(&amp;self, value: usize) -&gt; usize {
+        let original = self.0.fetch_add(value, Ordering::SeqCst);
+        original + value
+    }
+}
+#}</code></pre></pre>
 
                 </div>
 
                 <!-- Mobile navigation buttons -->
                 
-
-                
-                    <a rel="next" href="pages/hello_world.html" class="mobile-nav-chapters next" title="Next chapter">
-                        <i class="fa fa-angle-right"></i>
+                    <a rel="prev" href="./pages/btn_boxer/objects.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
                     </a>
+                
+
                 
 
             </div>
 
             
-
-            
-                <a href="pages/hello_world.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
-                    <i class="fa fa-angle-right"></i>
+                <a href="./pages/btn_boxer/objects.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
                 </a>
+            
+
             
 
         </div>

@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html" class="active"><strong>2.</strong> Боксирующие кнопки</a></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html" class="active"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Коробки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -87,6 +87,25 @@
 
                 <div id="content" class="content">
                     <a class="header" href="./pages/btn_boxer/index.html#Боксирующие-кнопки" id="Боксирующие-кнопки"><h1>Боксирующие кнопки</h1></a>
+<p><img src="img/btn_boxer.png" /></p>
+<blockquote>
+<p>Исходный код программы для этой главы можно найти <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/button_boxer">здесь</a>.</p>
+</blockquote>
+<p>В этом разделе мы рассмотрим, как структурировать Ваш UI с помощью <code>коробок</code>(box), изменять <code>метку</code>(label) и запрограммировать нажатие по кнопке. А также, к концу вы поймёте, как:</p>
+<ol>
+<li>Добавлять дочерние элементы в панель заголовка;</li>
+<li>Добавлять классы стилей к кнопке;</li>
+<li>Управлять состоянием приложения с помощью атомарных счётчиков <strong>Arc</strong> и выравнивать виджеты внутри контейнера.</li>
+</ol>
+<blockquote>
+<p>Напомним, что каждый GTK объект, который можно получить из контейнера <strong>gtk</strong> - заворачивают,
+так что не стоит беспокоится о правилах заимствования Rust. Объекты GTK считают ссылки,
+поэтому, когда вам нужно передать GTK объект через несколько замыканий, вы можете
+сделать это с помощью клонирования новой ссылки.</p>
+</blockquote>
+<a class="header" href="./pages/btn_boxer/index.html#Необходимые-знания" id="Необходимые-знания"><h2>Необходимые знания</h2></a>
+<p>Прежде чем продолжить изучение урока, убедитесь что вы понимаете что такое атомарность и атомарный счётчик ссылок (<strong>Arc</strong>). Эти понятия критически важны для возможности разделять состояние между несколькими замыканиями или потоками.
+Изучить этот вопрос можно в документации модулей <code>std::sync</code> и <code>std::sync::atomic</code>. Так же, вы можете ознакомиться с безблокировочной конкурентностью (lockless concurrency) <a href="https://assets.bitbashing.io/papers/lockless.pdf">в этом документе</a>.</p>
 
                 </div>
 
@@ -98,6 +117,10 @@
                 
 
                 
+                    <a rel="next" href="./pages/btn_boxer/objects.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
 
             </div>
 
@@ -107,6 +130,10 @@
                 </a>
             
 
+            
+                <a href="./pages/btn_boxer/objects.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
             
 
         </div>
@@ -121,20 +148,6 @@
 
         <!-- Livereload script (if served using the cli tool) -->
         
-    <script type="text/javascript">
-        var socket = new WebSocket("ws://localhost:3001");
-        socket.onmessage = function (event) {
-            if (event.data === "reload") {
-                socket.close();
-                location.reload(true); // force reload from server (not from cache)
-            }
-        };
-
-        window.onbeforeunload = function() {
-            socket.close();
-        }
-    </script>
-
 
         
 
