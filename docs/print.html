@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Коробки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li></ul></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -225,12 +225,12 @@ impl Header {
 <a class="header" href="print.html#Необходимые-знания" id="Необходимые-знания"><h2>Необходимые знания</h2></a>
 <p>Прежде чем продолжить изучение урока, убедитесь что вы понимаете что такое атомарность и атомарный счётчик ссылок (<strong>Arc</strong>). Эти понятия критически важны для возможности разделять состояние между несколькими замыканиями или потоками.
 Изучить этот вопрос можно в документации модулей <code>std::sync</code> и <code>std::sync::atomic</code>. Так же, вы можете ознакомиться с безблокировочной конкурентностью (lockless concurrency) <a href="https://assets.bitbashing.io/papers/lockless.pdf">в этом документе</a>.</p>
-<a class="header" href="print.html#Коробки-кнопки-и-метки" id="Коробки-кнопки-и-метки"><h1>Коробки, кнопки и метки</h1></a>
+<a class="header" href="print.html#Упаковки-кнопки-и-метки" id="Упаковки-кнопки-и-метки"><h1>Упаковки, кнопки и метки</h1></a>
 <p>Цель этого раздела заключается в том, чтобы дать объяснение объектам, которые будут использованы до того, как мы применим их на практике в следующих разделах.</p>
 <a class="header" href="print.html#gtkbox" id="gtkbox"><h2>GtkBox</h2></a>
-<p><strong>GtkBox</strong> является фактически эквивалентом UI вектора в Rust и должена быть объявлена с помощью <strong>Orientation</strong>, который определяет, что должны ли элементы быть выровнены слева направо или сверху вниз. Для тех, кто имеет опыт разработки с современным дизайном HTML5/CSS3, <strong>GtkBox</strong> эквивалентен гибким коробкам -- они могут расширяться на всё пространство, а виджеты, содержащиеся внутри, тоже могут расширяться в соответствии с правилами, применяемыми при дочерней упаковке.</p>
-<a class="header" href="print.html#Создание-коробки" id="Создание-коробки"><h2>Создание коробки</h2></a>
-<p>В следующем примере, мы создадим горизонтальную и вертикальную коробку с нулевым отступом между дочерними элементами, содержащимися в коробке. После создания коробки, вы можете задать виджеты, ипсользуя метод <code>pack_*</code>.</p>
+<p><strong>GtkBox</strong> является фактически эквивалентом UI вектора в Rust и должена быть объявлена с помощью <strong>Orientation</strong>, который определяет, что должны ли элементы быть выровнены слева направо или сверху вниз. Для тех, кто имеет опыт разработки с современным дизайном HTML5/CSS3, <strong>GtkBox</strong> эквивалентен гибким упаковкам -- они могут расширяться на всё пространство, а виджеты, содержащиеся внутри, тоже могут расширяться в соответствии с правилами, применяемыми при дочерней упаковке.</p>
+<a class="header" href="print.html#Создание-упаковки" id="Создание-упаковки"><h2>Создание упаковки</h2></a>
+<p>В следующем примере, мы создадим горизонтальную и вертикальную упаковку с нулевым отступом между дочерними элементами, содержащимися в упаковке. После создания упаковки, вы можете задать виджеты, ипсользуя метод <code>pack_*</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -238,8 +238,8 @@ let padding_between_children = 0;
 let horizontal_box = Box::new(Orientation::Horizontal, padding_between_children);
 let vertical_box = Box::new(Orientation::Vertical, padding_between_children);
 #}</code></pre></pre>
-<a class="header" href="print.html#Упаковка-коробки" id="Упаковка-коробки"><h2>Упаковка коробки</h2></a>
-<p>Вы могли заметить, что метод <code>pack_*</code> принимает большое количество параметров. Первым параметром должна быть ссылка на виджет, которую вы добавляете в контейнер. Вторым и третьим параметрами объявляют параметры заполнения соответственно. Последним параметром объявляют - как много единиц пространства должно быть между дочерними элементами в коробке.</p>
+<a class="header" href="print.html#Упаковка-упаковки" id="Упаковка-упаковки"><h2>Упаковка упаковки</h2></a>
+<p>Вы могли заметить, что метод <code>pack_*</code> принимает большое количество параметров. Первым параметром должна быть ссылка на виджет, которую вы добавляете в контейнер. Вторым и третьим параметрами объявляют параметры заполнения соответственно. Последним параметром объявляют - как много единиц пространства должно быть между дочерними элементами в упаковке.</p>
 <blockquote>
 <p>To further elaborate on the expand and fill parameters, expand defines whether the
 given widget should attempt to use all of the extra space that it can. Each widget that has
