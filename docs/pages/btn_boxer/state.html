@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html" class="active"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li></ul></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html" class="active"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="./pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="./pages/btn_boxer/programming.html"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -87,18 +87,14 @@
 
                 <div id="content" class="content">
                     <a class="header" href="./pages/btn_boxer/state.html#Сопровождение-внешнего-состояния" id="Сопровождение-внешнего-состояния"><h1>Сопровождение внешнего состояния</h1></a>
-<p>В этой главе у нас будет некоторое состояние, которым мы будем управлять с помощью UI. Поэтому, нам необходим способ хранения и загрузки значения из этого состояния. Программа, которую мы хотим написать, имеет один компонент: значение здоровья.</p>
-<p>Как оказалось, мы может напряму воспользоваться атомарными примитивами, таким как <strong>AtomicUsize</strong>, чтобы хранить значение для совместного использования нескольких неизменяемых замыканий. This
-atomic value can be manipulated without requiring mutable access to the inner value. So this
-can be passed around through an immutable borrow, and modified while being immutably borrowed
-at multiple locations.</p>
+<p>В этой главе у нас будет некоторое состояние, которым мы будем управлять с помощью UI. Поэтому нам необходим способ хранения и загрузки значения из этого состояния. Программа, которую мы хотим написать, имеет один компонент: значение здоровья.</p>
+<p>Как оказалось, мы напрямую можем воспользоваться атомарными примитивами, таким как <strong>AtomicUsize</strong>, чтобы хранить значение для совместного использования нескольких неизменяемых замыканий. Этим атомарным значением можно управлять, не требуя изменяемого доступа к внутреннему значению. Таким образом, мы можем передавать неизменяемые ссылки на это значение и изменять его даже когда оно уже одолжено в нескольких местах одновременно.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 pub struct HealthComponent(AtomicUsize);
 #}</code></pre></pre>
-<p>While we are at it, we can go ahead and abstract some logic to this component by implementing
-some useful methods for initializing the health, subtracting health, and healing health.</p>
+<p>Пока мы здесь, можем продолжить и написать некоторую логику для этой структуры в блоке реализации, используя следующие методы для здоровья:<code>initializing</code>,<code>subtracting</code> и <code>healing</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -131,6 +127,10 @@ impl HealthComponent {
                 
 
                 
+                    <a rel="next" href="./pages/btn_boxer/ui.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
 
             </div>
 
@@ -140,6 +140,10 @@ impl HealthComponent {
                 </a>
             
 
+            
+                <a href="./pages/btn_boxer/ui.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
             
 
         </div>

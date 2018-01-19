@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li></ul></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="./pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="./pages/btn_boxer/programming.html"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -287,18 +287,14 @@ new_button.get_style_context().map(|c| c.add_class(&quot;suggested-action&quot;)
 <p>Каждый <strong>GtkWidget</strong> предоставляет метод <strong>get_style_context()</strong>, который возвращает
 <strong>Option<StyleContext></strong>, тем самым предоставляя метод <strong>add_class()</strong>, который используется чтобы установить класс стиля. Понимаете это? Хорошо. Наиболее важные классы кнопок, которые нужно знать - это <code>destructive-action</code> и <code>suggested-action</code>. Как правило, destructive action окрашивает кнопку в красный цвет, между тем, suggested action использует синий цвет. Актуальный цвет будет зависеть от того, какая тема GTK используется вами.</p>
 <a class="header" href="print.html#Сопровождение-внешнего-состояния" id="Сопровождение-внешнего-состояния"><h1>Сопровождение внешнего состояния</h1></a>
-<p>В этой главе у нас будет некоторое состояние, которым мы будем управлять с помощью UI. Поэтому, нам необходим способ хранения и загрузки значения из этого состояния. Программа, которую мы хотим написать, имеет один компонент: значение здоровья.</p>
-<p>Как оказалось, мы может напряму воспользоваться атомарными примитивами, таким как <strong>AtomicUsize</strong>, чтобы хранить значение для совместного использования нескольких неизменяемых замыканий. This
-atomic value can be manipulated without requiring mutable access to the inner value. So this
-can be passed around through an immutable borrow, and modified while being immutably borrowed
-at multiple locations.</p>
+<p>В этой главе у нас будет некоторое состояние, которым мы будем управлять с помощью UI. Поэтому нам необходим способ хранения и загрузки значения из этого состояния. Программа, которую мы хотим написать, имеет один компонент: значение здоровья.</p>
+<p>Как оказалось, мы напрямую можем воспользоваться атомарными примитивами, таким как <strong>AtomicUsize</strong>, чтобы хранить значение для совместного использования нескольких неизменяемых замыканий. Этим атомарным значением можно управлять, не требуя изменяемого доступа к внутреннему значению. Таким образом, мы можем передавать неизменяемые ссылки на это значение и изменять его даже когда оно уже одолжено в нескольких местах одновременно.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 pub struct HealthComponent(AtomicUsize);
 #}</code></pre></pre>
-<p>While we are at it, we can go ahead and abstract some logic to this component by implementing
-some useful methods for initializing the health, subtracting health, and healing health.</p>
+<p>Пока мы здесь, можем продолжить и написать некоторую логику для этой структуры в блоке реализации, используя следующие методы для здоровья:<code>initializing</code>,<code>subtracting</code> и <code>healing</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -320,6 +316,320 @@ impl HealthComponent {
     }
 }
 #}</code></pre></pre>
+<a class="header" href="print.html#Создание-структуры-пользовательского-интерфейса-ui" id="Создание-структуры-пользовательского-интерфейса-ui"><h1>Создание структуры пользовательского интерфейса (UI)</h1></a>
+<p>Используя структуру предыдущей главы в качестве образца, мы можем расширить её, чтобы включить новые элементы UI, которые будем использовать в нашей программе. It is important to note that you only need to store elements that you are going to later program after the UI is constructed.</p>
+<p>В этой программе мы добавим два <strong>GtkButtons</strong> к панели заголовка и воспользуемся вертикальной и горизонтальной <strong>GtkBox</strong> с некоторыми метками (labels), чтобы отобразить информацию о текущем состоянии нашего приложения. Следующее изображение является нашей новой диаграммой структур.</p>
+<p><img src="img/btn_diagram.png" /></p>
+<p>Что означает следующее в Rust:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+pub struct App {
+    pub window:  Window,
+    pub header:  Header,
+    pub content: Content,
+}
+
+pub struct Header {
+    pub container: HeaderBar,
+    pub hit:       Button,
+    pub heal:      Button,
+}
+
+pub struct Content {
+    pub container: Box,
+    pub health:    Label,
+    pub message:   Label,
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#Создание-структуры-app" id="Создание-структуры-app"><h2>Создание структуры App</h2></a>
+<p>Следуя последнему уроку, начнём с нашей структуры <strong>App</strong>. Метод <strong>new()</strong> должен принимать ссылку на <strong>&amp;HealthComponent</strong> в качестве вводимого значения в UI, later on
+down the road within our <strong>Content</strong> structure. One will note that we have added a new
+<strong>content</strong> variable of type <strong>Context</strong>, which takes that health reference.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl App {
+    fn new(health: &amp;HealthComponent) -&gt; App {
+        // Create a new top level window.
+        let window = Window::new(WindowType::Toplevel);
+        // Create a the headerbar and it's associated content.
+        let header = Header::new();
+        // Contains the content within the window.
+        let content = Content::new(health);
+
+        // Set the headerbar as the title bar widget.
+        window.set_titlebar(&amp;header.container);
+        // Set the title of the window.
+        window.set_title(&quot;App Name&quot;);
+        // Set the window manager class.
+        window.set_wmclass(&quot;app-name&quot;, &quot;App name&quot;);
+        // The icon the app will display.
+        Window::set_default_icon_name(&quot;iconname&quot;);
+        // Add the content box into the window.
+        window.add(&amp;content.container);
+
+        // Programs what to do when the exit button is used.
+        window.connect_delete_event(move |_, _| {
+            main_quit();
+            Inhibit(false)
+        });
+
+        // Return our main application state
+        App { window, header, content }
+    }
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#Создание-header" id="Создание-header"><h2>Создание Header</h2></a>
+<p>Затем мы так же реализуем метод для нашего заголовка, который должен содержать два элемента <strong>GtkButtons</strong> -- кнопка удара и лечения. Также обратите внимание, что мы устанавливаем некоторые классы стилей этим кнопкам, чтобы дать им более информативную визуальную способность.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl Header {
+    fn new() -&gt; Header {
+        // Creates the main header bar container widget.
+        let container = HeaderBar::new();
+
+        // Sets the text to display in the title section of the header bar.
+        container.set_title(&quot;App Name&quot;);
+        // Enable the window controls within this headerbar.
+        container.set_show_close_button(true);
+
+        // Create the hit and heal buttons.
+        let hit = Button::new_with_label(&quot;Hit&quot;);
+        let heal = Button::new_with_label(&quot;Heal&quot;);
+
+        // Add the corresponding style classes to those buttons.
+        hit.get_style_context().map(|c| c.add_class(&quot;destructive-action&quot;));
+        heal.get_style_context().map(|c| c.add_class(&quot;suggested-action&quot;));
+
+        // THen add them to the header bar.
+        container.pack_start(&amp;hit);
+        container.pack_end(&amp;heal);
+
+        // Returns the header and all of it's state
+        Header { container, hit, heal }
+    }
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#Создание-content" id="Создание-content"><h2>Создание Content</h2></a>
+<p>Теперь пришло время создать содержимое для нашего окна. При создании своего интерфейса (UI) с древовидной диаграммой, вы почти достигните <strong>GtkBoxes</strong>. При инициализации, эта упаковка должна быть указана с <strong>Horizontal</strong> или  <strong>Vertical</strong> оринтацией.</p>
+<p>You will amost certainly reach for <strong>GtkBoxes</strong> for configuring your UI. These can be created with either a <strong>Horizontal</strong> or <strong>Vertical</strong> alignment. These boxes are where you will add all of your widgets, where they will be stacked according to the alignment of the box they are attached to.</p>
+<p>Мы должны создать вертикальную упаковку, которая содержит два дочерних элемента: вертикальный <strong>GtkBox</strong> содержащий метку (label) и значение, а затем ниже простой <strong>GtkLabel</strong>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl Content {
+    fn new(health: &amp;HealthComponent) -&gt; Content {
+        // Create a vertical box to store all of it's inner children vertically.
+        let container = Box::new(Orientation::Vertical, 0);
+
+        // The health info will be contained within a horizontal box within the vertical box.
+        let health_info = Box::new(Orientation::Horizontal, 0);
+        let health_label = Label::new(&quot;Current Health:&quot;);
+        let health = Label::new(health.get_health().to_string().as_str());
+
+        // Set the horizontal alignments of each of our objects.
+        health_info.set_halign(Align::Center);
+        health_label.set_halign(Align::Start);
+        health.set_halign(Align::Start);
+
+
+        // Add the health info box's children
+        health_info.pack_start(&amp;health_label, false, false, 5);
+        health_info.pack_start(&amp;health, true, true, 5);
+
+        // Create a message label that will later be modified by the application, upon
+        // performing a hit or heal action.
+        let message = Label::new(&quot;Hello&quot;);
+
+        // Add everything to our vertical box
+        container.pack_start(&amp;health_info, true, false, 0);
+        container.pack_start(&amp;Separator::new(Orientation::Horizontal), false, false, 0);
+        container.pack_start(&amp;message, true, false, 0);
+
+        Content { container, health, message }
+    }
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#Устанавливаем-выравнивание" id="Устанавливаем-выравнивание"><h3>Устанавливаем выравнивание</h3></a>
+<p>Возможно, вы заметили, что приведённый код выше устанавливает горизонтальные выравнивания.
+По желанию, с помощью методов <code>set_halign()</code> и <code>set_valign()</code>, можно установить выравнивание для виджетов.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Set the horizontal alignments of each of our objects.
+health_info.set_halign(Align::Center);
+health_label.set_halign(Align::Start);
+health.set_halign(Align::Start);
+#}</code></pre></pre>
+<a class="header" href="print.html#programming-the-ui" id="programming-the-ui"><h1>Programming the UI</h1></a>
+<p>At this point, we can now wire everything together in the main thread. First we will set the
+default value (health value) for the state of the program. That value will be used to set
+the initial state of the GTK application structure. Then we shall program the hit and heal
+buttons, which shall change values in the content area of main window.</p>
+<a class="header" href="print.html#before-we-start" id="before-we-start"><h2>Before We Start</h2></a>
+<p>We are going to have some predefined strings utilized based on what action was performed, and
+certain conditions of the <strong>HealthComponents</strong> value. To do this, we will have a <strong>MESSAGES</strong>
+array that we will access via a <strong>u8</strong>-sized enum, which will be used to get indexes into the
+array.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// Predefined messages that will be used by the UI upon certain conditions.
+const MESSAGES: [&amp;str; 3] = [&quot;Ouch! You hit me!&quot;, &quot;...&quot;, &quot;Thanks!&quot;];
+
+#[repr(u8)]
+// An enum, represented as a u8, that is used as an index into the `MESSAGES` array.
+enum Message { Hit, Dead, Heal }
+#}</code></pre></pre>
+<p>For those not yet versed in Rust, the <code>#[repr(u8)]</code> attribute defines that the following item
+should be represented as a <strong>u8</strong> value in memory. By default, enum variants start counting from
+zero, so <strong>Hit</strong> is <code>0</code>, whereas <strong>Heal</strong> is <code>2</code>. If you want to make this explicit, you can also
+write this as so:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[repr(u8)]
+enum Message { Hit = 0, Dead = 1, Heal = 2 }
+#}</code></pre></pre>
+<a class="header" href="print.html#initializing-the-health-component--application-structure" id="initializing-the-health-component--application-structure"><h2>Initializing the Health Component &amp; Application Structure</h2></a>
+<p>After initializing GTK, we will create our health component, which will be wrapped within an
+atomic reference-counted pointer (<strong>Arc</strong>). If we remember from previous code, the inner value
+is actually an <strong>AtomicUsize</strong>, which serves as our health counter. This value will be shared
+among multiple closures, hence the requirement for the reference counter.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let health = Arc::new(HealthComponent::new(10));
+#}</code></pre></pre>
+<p>Using this value, we will create our application's UI structure. Note that <code>&amp;health</code> is
+automatically referenced as an <strong>&amp;HealthComponent</strong>, even though it's wrapped within an <strong>Arc</strong>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let app = App::new(&amp;health);
+#}</code></pre></pre>
+<a class="header" href="print.html#programming-the-hit-button" id="programming-the-hit-button"><h2>Programming the Hit Button</h2></a>
+<p>From here on, all we need to is to program our widgets, and this is where we will share both
+our health component, and various other UI widgets across closures. Starting with the hit button,
+we simply need to program what will happen when that button is clicked. The <strong>ButtonExt</strong> trait
+provides a <strong>connect_clicked()</strong> method for precisely that.</p>
+<blockquote>
+<p>Note that widgets in GTK typically pass themselves through their closures, so if you need to
+manipulate the calling widget, you can do so by using the assigned value passed through the
+closure. We don't require this functionality, so we shall ignore the value.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+widget.connect_action(move |widget| {});
+#}</code></pre></pre>
+</blockquote>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+{
+    // Program the Hit button to subtract health.
+    let health = health.clone();
+    let message = app.content.message.clone();
+    let info = app.content.health.clone();
+    app.header.hit.clone().connect_clicked(move |_| {
+        let new_health = health.subtract(1);
+        let action = if new_health == 0 { Message::Dead } else { Message::Hit };
+        message.set_label(MESSAGES[action as usize]);
+        info.set_label(new_health.to_string().as_str());
+    });
+}
+#}</code></pre></pre>
+<p>In the above, we create an anonymous scope so that we can self-contain our cloned references.
+Each invocation of <strong>clone()</strong> will simply increment a reference counter, and enable these values
+to be used again at a later time.</p>
+<p>After subtracting from the health component, if the health is now <code>0</code>, we will return
+<strong>Message::Dead</strong>, otherwise the message shall be <strong>MessageHit</strong>. Once we have this information,
+it's just a matter of updated the labels with their new values.</p>
+<a class="header" href="print.html#programming-the-heal-button" id="programming-the-heal-button"><h2>Programming the Heal Button</h2></a>
+<p>This works almost identically, so we can effectively copy and paste the above code, and then
+modify it to meet our needs for this action.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+{
+    // Program the Heal button to restore health.
+    let health = health.clone();
+    let message = app.content.message.clone();
+    let info = app.content.health.clone();
+    app.header.heal.clone().connect_clicked(move |_| {
+        let new_health = health.heal(5);
+        message.set_label(MESSAGES[Message::Heal as usize]);
+        info.set_label(new_health.to_string().as_str());
+    });
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#altogether" id="altogether"><h2>Altogether</h2></a>
+<p>After programming the UI, you can end the code by tacking on the following at the end:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Make all the widgets within the UI visible.
+app.window.show_all();
+
+// Start the GTK main event loop
+gtk::main();
+#}</code></pre></pre>
+<p>And you should have your source code look as follows:</p>
+<pre><pre class="playpen"><code class="language-rust">/// Predefined messages that will be used by the UI upon certain conditions.
+const MESSAGES: [&amp;str; 3] = [&quot;Ouch! You hit me!&quot;, &quot;...&quot;, &quot;Thanks!&quot;];
+
+#[repr(u8)]
+// An enum, used as a u8, that is used as an index into the `MESSAGES` array.
+enum Message { Hit, Dead, Heal }
+
+fn main() {
+    // Initialize GTK before proceeding.
+    if gtk::init().is_err() {
+        eprintln!(&quot;failed to initialize GTK Application&quot;);
+        process::exit(1);
+    }
+
+    // Set the initial state of our health component. We use an `Arc` so that we can share
+    // this value across multiple programmable closures.
+    let health = Arc::new(HealthComponent::new(10));
+
+    // Initialize the UI's initial state.
+    let app = App::new(&amp;health);
+
+    {
+        // Program the Hit button to subtract health.
+        let health = health.clone();
+        let message = app.content.message.clone();
+        let info = app.content.health.clone();
+        app.header.hit.clone().connect_clicked(move |_| {
+            let new_health = health.subtract(1);
+            let action = if new_health == 0 { Message::Dead } else { Message::Hit };
+            message.set_label(MESSAGES[action as usize]);
+            info.set_label(new_health.to_string().as_str());
+        });
+    }
+
+    {
+        // Program the Heal button to restore health.
+        let health = health.clone();
+        let message = app.content.message.clone();
+        let info = app.content.health.clone();
+        app.header.heal.clone().connect_clicked(move |_| {
+            let new_health = health.heal(5);
+            message.set_label(MESSAGES[Message::Heal as usize]);
+            info.set_label(new_health.to_string().as_str());
+        });
+    }
+
+    // Make all the widgets within the UI visible.
+    app.window.show_all();
+
+    // Start the GTK main event loop
+    gtk::main();
+}
+</code></pre></pre>
 
                 </div>
 

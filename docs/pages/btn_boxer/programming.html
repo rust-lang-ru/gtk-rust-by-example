@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Программирование UI - Gtk-Rust by Example</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A description">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="../../">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="./pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="./pages/btn_boxer/programming.html" class="active"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Gtk-Rust by Example</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="./pages/btn_boxer/programming.html#programming-the-ui" id="programming-the-ui"><h1>Programming the UI</h1></a>
+<p>At this point, we can now wire everything together in the main thread. First we will set the
+default value (health value) for the state of the program. That value will be used to set
+the initial state of the GTK application structure. Then we shall program the hit and heal
+buttons, which shall change values in the content area of main window.</p>
+<a class="header" href="./pages/btn_boxer/programming.html#before-we-start" id="before-we-start"><h2>Before We Start</h2></a>
+<p>We are going to have some predefined strings utilized based on what action was performed, and
+certain conditions of the <strong>HealthComponents</strong> value. To do this, we will have a <strong>MESSAGES</strong>
+array that we will access via a <strong>u8</strong>-sized enum, which will be used to get indexes into the
+array.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// Predefined messages that will be used by the UI upon certain conditions.
+const MESSAGES: [&amp;str; 3] = [&quot;Ouch! You hit me!&quot;, &quot;...&quot;, &quot;Thanks!&quot;];
+
+#[repr(u8)]
+// An enum, represented as a u8, that is used as an index into the `MESSAGES` array.
+enum Message { Hit, Dead, Heal }
+#}</code></pre></pre>
+<p>For those not yet versed in Rust, the <code>#[repr(u8)]</code> attribute defines that the following item
+should be represented as a <strong>u8</strong> value in memory. By default, enum variants start counting from
+zero, so <strong>Hit</strong> is <code>0</code>, whereas <strong>Heal</strong> is <code>2</code>. If you want to make this explicit, you can also
+write this as so:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[repr(u8)]
+enum Message { Hit = 0, Dead = 1, Heal = 2 }
+#}</code></pre></pre>
+<a class="header" href="./pages/btn_boxer/programming.html#initializing-the-health-component--application-structure" id="initializing-the-health-component--application-structure"><h2>Initializing the Health Component &amp; Application Structure</h2></a>
+<p>After initializing GTK, we will create our health component, which will be wrapped within an
+atomic reference-counted pointer (<strong>Arc</strong>). If we remember from previous code, the inner value
+is actually an <strong>AtomicUsize</strong>, which serves as our health counter. This value will be shared
+among multiple closures, hence the requirement for the reference counter.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let health = Arc::new(HealthComponent::new(10));
+#}</code></pre></pre>
+<p>Using this value, we will create our application's UI structure. Note that <code>&amp;health</code> is
+automatically referenced as an <strong>&amp;HealthComponent</strong>, even though it's wrapped within an <strong>Arc</strong>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let app = App::new(&amp;health);
+#}</code></pre></pre>
+<a class="header" href="./pages/btn_boxer/programming.html#programming-the-hit-button" id="programming-the-hit-button"><h2>Programming the Hit Button</h2></a>
+<p>From here on, all we need to is to program our widgets, and this is where we will share both
+our health component, and various other UI widgets across closures. Starting with the hit button,
+we simply need to program what will happen when that button is clicked. The <strong>ButtonExt</strong> trait
+provides a <strong>connect_clicked()</strong> method for precisely that.</p>
+<blockquote>
+<p>Note that widgets in GTK typically pass themselves through their closures, so if you need to
+manipulate the calling widget, you can do so by using the assigned value passed through the
+closure. We don't require this functionality, so we shall ignore the value.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+widget.connect_action(move |widget| {});
+#}</code></pre></pre>
+</blockquote>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+{
+    // Program the Hit button to subtract health.
+    let health = health.clone();
+    let message = app.content.message.clone();
+    let info = app.content.health.clone();
+    app.header.hit.clone().connect_clicked(move |_| {
+        let new_health = health.subtract(1);
+        let action = if new_health == 0 { Message::Dead } else { Message::Hit };
+        message.set_label(MESSAGES[action as usize]);
+        info.set_label(new_health.to_string().as_str());
+    });
+}
+#}</code></pre></pre>
+<p>In the above, we create an anonymous scope so that we can self-contain our cloned references.
+Each invocation of <strong>clone()</strong> will simply increment a reference counter, and enable these values
+to be used again at a later time.</p>
+<p>After subtracting from the health component, if the health is now <code>0</code>, we will return
+<strong>Message::Dead</strong>, otherwise the message shall be <strong>MessageHit</strong>. Once we have this information,
+it's just a matter of updated the labels with their new values.</p>
+<a class="header" href="./pages/btn_boxer/programming.html#programming-the-heal-button" id="programming-the-heal-button"><h2>Programming the Heal Button</h2></a>
+<p>This works almost identically, so we can effectively copy and paste the above code, and then
+modify it to meet our needs for this action.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+{
+    // Program the Heal button to restore health.
+    let health = health.clone();
+    let message = app.content.message.clone();
+    let info = app.content.health.clone();
+    app.header.heal.clone().connect_clicked(move |_| {
+        let new_health = health.heal(5);
+        message.set_label(MESSAGES[Message::Heal as usize]);
+        info.set_label(new_health.to_string().as_str());
+    });
+}
+#}</code></pre></pre>
+<a class="header" href="./pages/btn_boxer/programming.html#altogether" id="altogether"><h2>Altogether</h2></a>
+<p>After programming the UI, you can end the code by tacking on the following at the end:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Make all the widgets within the UI visible.
+app.window.show_all();
+
+// Start the GTK main event loop
+gtk::main();
+#}</code></pre></pre>
+<p>And you should have your source code look as follows:</p>
+<pre><pre class="playpen"><code class="language-rust">/// Predefined messages that will be used by the UI upon certain conditions.
+const MESSAGES: [&amp;str; 3] = [&quot;Ouch! You hit me!&quot;, &quot;...&quot;, &quot;Thanks!&quot;];
+
+#[repr(u8)]
+// An enum, used as a u8, that is used as an index into the `MESSAGES` array.
+enum Message { Hit, Dead, Heal }
+
+fn main() {
+    // Initialize GTK before proceeding.
+    if gtk::init().is_err() {
+        eprintln!(&quot;failed to initialize GTK Application&quot;);
+        process::exit(1);
+    }
+
+    // Set the initial state of our health component. We use an `Arc` so that we can share
+    // this value across multiple programmable closures.
+    let health = Arc::new(HealthComponent::new(10));
+
+    // Initialize the UI's initial state.
+    let app = App::new(&amp;health);
+
+    {
+        // Program the Hit button to subtract health.
+        let health = health.clone();
+        let message = app.content.message.clone();
+        let info = app.content.health.clone();
+        app.header.hit.clone().connect_clicked(move |_| {
+            let new_health = health.subtract(1);
+            let action = if new_health == 0 { Message::Dead } else { Message::Hit };
+            message.set_label(MESSAGES[action as usize]);
+            info.set_label(new_health.to_string().as_str());
+        });
+    }
+
+    {
+        // Program the Heal button to restore health.
+        let health = health.clone();
+        let message = app.content.message.clone();
+        let info = app.content.health.clone();
+        app.header.heal.clone().connect_clicked(move |_| {
+            let new_health = health.heal(5);
+            message.set_label(MESSAGES[Message::Heal as usize]);
+            info.set_label(new_health.to_string().as_str());
+        });
+    }
+
+    // Make all the widgets within the UI visible.
+    app.window.show_all();
+
+    // Start the GTK main event loop
+    gtk::main();
+}
+</code></pre></pre>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="./pages/btn_boxer/ui.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+
+            </div>
+
+            
+                <a href="./pages/btn_boxer/ui.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>
