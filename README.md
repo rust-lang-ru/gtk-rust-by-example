@@ -12,7 +12,7 @@
 ## Работа в процессе
 
 Перевод `GRBE` находится в процессе.
-Если вы заинтересованы в этом проекте и хотите помочь - смотрите [Contributing](https://github.com/ruRust/gtk-rust-by-example/blob/master/CONTRIBUTING.md).
+Если вы заинтересованы в этом проекте и хотите помочь - смотрите [CONTRIBUTING.md](https://github.com/ruRust/gtk-rust-by-example/blob/master/CONTRIBUTING.md).
 
 ## Использование
 
@@ -33,7 +33,7 @@ $ mdbook build && mdbook serve
 
 ## Лицензия
 
-`Gtk-Rust на примерах` распространяется по двойной лицензии: лицензия [Apache][apache] 2.0 и лицензия [MIT][mit].
+`Gtk-Rust на примерах` распространяется по двойной лицензии: лицензия [Apache 2.0][apache] и лицензия [MIT][mit].
 
 [apache]: https://github.com/ruRust/gtk-rust-by-example/blob/master/LICENSE-APACHE
 [mit]: https://github.com/ruRust/gtk-rust-by-example/blob/master/LICENSE-MIT.md
