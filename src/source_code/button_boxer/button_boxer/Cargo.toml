@@ -1,0 +1,11 @@
+[package]
+name = "button_boxer"
+version = "0.1.0"
+authors = ["Norman Ritchie <born2lose@protonmail.com>"]
+
+[dependencies]
+
+[dependencies.gtk]
+version = "0.3.0"
+features = ["v3_22"]
+
