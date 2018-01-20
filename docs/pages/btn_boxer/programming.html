@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="./pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="./pages/btn_boxer/programming.html" class="active"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="pages/btn_boxer/programming.html" class="active"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -86,12 +86,12 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="./pages/btn_boxer/programming.html#programming-the-ui" id="programming-the-ui"><h1>Programming the UI</h1></a>
+                    <a class="header" href="pages/btn_boxer/programming.html#programming-the-ui" id="programming-the-ui"><h1>Programming the UI</h1></a>
 <p>At this point, we can now wire everything together in the main thread. First we will set the
 default value (health value) for the state of the program. That value will be used to set
 the initial state of the GTK application structure. Then we shall program the hit and heal
 buttons, which shall change values in the content area of main window.</p>
-<a class="header" href="./pages/btn_boxer/programming.html#before-we-start" id="before-we-start"><h2>Before We Start</h2></a>
+<a class="header" href="pages/btn_boxer/programming.html#before-we-start" id="before-we-start"><h2>Before We Start</h2></a>
 <p>We are going to have some predefined strings utilized based on what action was performed, and
 certain conditions of the <strong>HealthComponents</strong> value. To do this, we will have a <strong>MESSAGES</strong>
 array that we will access via a <strong>u8</strong>-sized enum, which will be used to get indexes into the
@@ -116,7 +116,7 @@ write this as so:</p>
 #[repr(u8)]
 enum Message { Hit = 0, Dead = 1, Heal = 2 }
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/programming.html#initializing-the-health-component--application-structure" id="initializing-the-health-component--application-structure"><h2>Initializing the Health Component &amp; Application Structure</h2></a>
+<a class="header" href="pages/btn_boxer/programming.html#initializing-the-health-component--application-structure" id="initializing-the-health-component--application-structure"><h2>Initializing the Health Component &amp; Application Structure</h2></a>
 <p>After initializing GTK, we will create our health component, which will be wrapped within an
 atomic reference-counted pointer (<strong>Arc</strong>). If we remember from previous code, the inner value
 is actually an <strong>AtomicUsize</strong>, which serves as our health counter. This value will be shared
@@ -133,7 +133,7 @@ automatically referenced as an <strong>&amp;HealthComponent</strong>, even thoug
 #fn main() {
 let app = App::new(&amp;health);
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/programming.html#programming-the-hit-button" id="programming-the-hit-button"><h2>Programming the Hit Button</h2></a>
+<a class="header" href="pages/btn_boxer/programming.html#programming-the-hit-button" id="programming-the-hit-button"><h2>Programming the Hit Button</h2></a>
 <p>From here on, all we need to is to program our widgets, and this is where we will share both
 our health component, and various other UI widgets across closures. Starting with the hit button,
 we simply need to program what will happen when that button is clicked. The <strong>ButtonExt</strong> trait
@@ -170,7 +170,7 @@ to be used again at a later time.</p>
 <p>After subtracting from the health component, if the health is now <code>0</code>, we will return
 <strong>Message::Dead</strong>, otherwise the message shall be <strong>MessageHit</strong>. Once we have this information,
 it's just a matter of updated the labels with their new values.</p>
-<a class="header" href="./pages/btn_boxer/programming.html#programming-the-heal-button" id="programming-the-heal-button"><h2>Programming the Heal Button</h2></a>
+<a class="header" href="pages/btn_boxer/programming.html#programming-the-heal-button" id="programming-the-heal-button"><h2>Programming the Heal Button</h2></a>
 <p>This works almost identically, so we can effectively copy and paste the above code, and then
 modify it to meet our needs for this action.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -188,7 +188,7 @@ modify it to meet our needs for this action.</p>
     });
 }
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/programming.html#altogether" id="altogether"><h2>Altogether</h2></a>
+<a class="header" href="pages/btn_boxer/programming.html#altogether" id="altogether"><h2>Altogether</h2></a>
 <p>After programming the UI, you can end the code by tacking on the following at the end:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -258,7 +258,7 @@ fn main() {
 
                 <!-- Mobile navigation buttons -->
                 
-                    <a rel="prev" href="./pages/btn_boxer/ui.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                    <a rel="prev" href="pages/btn_boxer/ui.html" class="mobile-nav-chapters previous" title="Previous chapter">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
@@ -268,7 +268,7 @@ fn main() {
             </div>
 
             
-                <a href="./pages/btn_boxer/ui.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                <a href="pages/btn_boxer/ui.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-left"></i>
                 </a>
             
@@ -287,6 +287,20 @@ fn main() {
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 

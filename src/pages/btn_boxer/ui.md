@@ -37,32 +37,36 @@ down the road within our **Content** structure. One will note that we have added
 ```rust
 impl App {
     fn new(health: &HealthComponent) -> App {
-        // Create a new top level window.
+        // Создадим новое окно с типом `Toplevel`.
         let window = Window::new(WindowType::Toplevel);
-        // Create a the headerbar and it's associated content.
+        // Создадим заголовок и связанное с ним содержимое.
         let header = Header::new();
-        // Contains the content within the window.
+        // Расположим содержимое в окне.
         let content = Content::new(health);
 
         // Set the headerbar as the title bar widget.
         window.set_titlebar(&header.container);
-        // Set the title of the window.
-        window.set_title("App Name");
-        // Set the window manager class.
-        window.set_wmclass("app-name", "App name");
-        // The icon the app will display.
-        Window::set_default_icon_name("iconname");
-        // Add the content box into the window.
+        // Установим описание для окна.
+        window.set_title("Боксирующие кнопки");
+        // Установим класс для оконного менеджера.
+        window.set_wmclass("app-name", "Боксирующие кнопки");
+        // Установим иконку, отображаемую приложением.
+        Window::set_default_icon_name("имя-иконки");
+        // Добавим коробку с содержимым в окно.
         window.add(&content.container);
 
-        // Programs what to do when the exit button is used.
+        // Запрограммируем выход из программы при нажатии кнопки.
         window.connect_delete_event(move |_, _| {
             main_quit();
             Inhibit(false)
         });
 
-        // Return our main application state
-        App { window, header, content }
+        // Вернём состояние нашего приложения.
+        App {
+            window,
+            header,
+            content,
+        }
     }
 }
 ```
@@ -74,28 +78,34 @@ impl App {
 ```rust
 impl Header {
     fn new() -> Header {
-        // Creates the main header bar container widget.
+        // Создадим главный заголовочный бар содержащий виджет.
         let container = HeaderBar::new();
 
-        // Sets the text to display in the title section of the header bar.
-        container.set_title("App Name");
-        // Enable the window controls within this headerbar.
+        // Установим текст для отображения в секции для названия.
+        container.set_title("Боксирующие кнопки");
+        // Сделаем активными элементы управления окна в этой панели.
         container.set_show_close_button(true);
 
-        // Create the hit and heal buttons.
-        let hit = Button::new_with_label("Hit");
-        let heal = Button::new_with_label("Heal");
+        // Создадим кнопки: `ударить` и `лечить`.
+        let hit = Button::new_with_label("Ударить");
+        let heal = Button::new_with_label("Лечить");
 
-        // Add the corresponding style classes to those buttons.
-        hit.get_style_context().map(|c| c.add_class("destructive-action"));
-        heal.get_style_context().map(|c| c.add_class("suggested-action"));
+        // Добавим соответствующие классы стилей к этим кнопкам.
+        hit.get_style_context()
+            .map(|c| c.add_class("destructive-action"));
+        heal.get_style_context()
+            .map(|c| c.add_class("suggested-action"));
 
-        // THen add them to the header bar.
+        // Теперь добавим их в панель заголовка.
         container.pack_start(&hit);
         container.pack_end(&heal);
 
-        // Returns the header and all of it's state
-        Header { container, hit, heal }
+        // Вернём the header and all of it's state
+        Header {
+            container,
+            hit,
+            heal,
+        }
     }
 }
 ```
@@ -111,34 +121,39 @@ You will amost certainly reach for **GtkBoxes** for configuring your UI. These c
 ```rust
 impl Content {
     fn new(health: &HealthComponent) -> Content {
-        // Create a vertical box to store all of it's inner children vertically.
+        // Создадим вертикальную упаковку, чтобы хранить там все дочерние элементы.
         let container = Box::new(Orientation::Vertical, 0);
 
-        // The health info will be contained within a horizontal box within the vertical box.
+        // Информация о здоровье будет храниться в горизонтальной упаковке вместе с вертикальной.
         let health_info = Box::new(Orientation::Horizontal, 0);
-        let health_label = Label::new("Current Health:");
+        let health_label = Label::new("Текущее значение здоровья:");
         let health = Label::new(health.get_health().to_string().as_str());
 
-        // Set the horizontal alignments of each of our objects.
+        // Установим горизонтальное выравнивание для наших объектов.
         health_info.set_halign(Align::Center);
         health_label.set_halign(Align::Start);
         health.set_halign(Align::Start);
 
-
-        // Add the health info box's children
+        // Добивим информацию о здоровье в дочернюю коробку.
         health_info.pack_start(&health_label, false, false, 5);
         health_info.pack_start(&health, true, true, 5);
 
-        // Create a message label that will later be modified by the application, upon
-        // performing a hit or heal action.
-        let message = Label::new("Hello");
+        /*
+         *   Создадим метку, которая будет изменяться приложением
+         *   при выполнении удара или лечения.
+         */
+        let message = Label::new("Привет");
 
-        // Add everything to our vertical box
+        // Добавим все в нашу вертикальную коробку.
         container.pack_start(&health_info, true, false, 0);
         container.pack_start(&Separator::new(Orientation::Horizontal), false, false, 0);
         container.pack_start(&message, true, false, 0);
 
-        Content { container, health, message }
+        Content {
+            container,
+            health,
+            message,
+        }
     }
 }
 ```
@@ -149,7 +164,7 @@ impl Content {
 По желанию, с помощью методов `set_halign()` и `set_valign()`, можно установить выравнивание для виджетов.
 
 ```rust
-// Set the horizontal alignments of each of our objects.
+// Установим горизонтальное выравнивание для наших объектов.
 health_info.set_halign(Align::Center);
 health_label.set_halign(Align::Start);
 health.set_halign(Align::Start);

@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html" class="active"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="./pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="./pages/btn_boxer/programming.html"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/btn_boxer/objects.html" class="active"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="pages/btn_boxer/programming.html"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -86,11 +86,11 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="./pages/btn_boxer/objects.html#Упаковки-кнопки-и-метки" id="Упаковки-кнопки-и-метки"><h1>Упаковки, кнопки и метки</h1></a>
+                    <a class="header" href="pages/btn_boxer/objects.html#Упаковки-кнопки-и-метки" id="Упаковки-кнопки-и-метки"><h1>Упаковки, кнопки и метки</h1></a>
 <p>Цель этого раздела заключается в том, чтобы дать объяснение объектам, которые будут использованы до того, как мы применим их на практике в следующих разделах.</p>
-<a class="header" href="./pages/btn_boxer/objects.html#gtkbox" id="gtkbox"><h2>GtkBox</h2></a>
+<a class="header" href="pages/btn_boxer/objects.html#gtkbox" id="gtkbox"><h2>GtkBox</h2></a>
 <p><strong>GtkBox</strong> является фактически эквивалентом UI вектора в Rust и должена быть объявлена с помощью <strong>Orientation</strong>, который определяет, что должны ли элементы быть выровнены слева направо или сверху вниз. Для тех, кто имеет опыт разработки с современным дизайном HTML5/CSS3, <strong>GtkBox</strong> эквивалентен гибким упаковкам -- они могут расширяться на всё пространство, а виджеты, содержащиеся внутри, тоже могут расширяться в соответствии с правилами, применяемыми при дочерней упаковке.</p>
-<a class="header" href="./pages/btn_boxer/objects.html#Создание-упаковки" id="Создание-упаковки"><h2>Создание упаковки</h2></a>
+<a class="header" href="pages/btn_boxer/objects.html#Создание-упаковки" id="Создание-упаковки"><h2>Создание упаковки</h2></a>
 <p>В следующем примере, мы создадим горизонтальную и вертикальную упаковку с нулевым отступом между дочерними элементами, содержащимися в упаковке. После создания упаковки, вы можете задать виджеты, ипсользуя метод <code>pack_*</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -99,7 +99,7 @@ let padding_between_children = 0;
 let horizontal_box = Box::new(Orientation::Horizontal, padding_between_children);
 let vertical_box = Box::new(Orientation::Vertical, padding_between_children);
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/objects.html#Упаковка-упаковки" id="Упаковка-упаковки"><h2>Упаковка упаковки</h2></a>
+<a class="header" href="pages/btn_boxer/objects.html#Упаковка-упаковки" id="Упаковка-упаковки"><h2>Упаковка упаковки</h2></a>
 <p>Вы могли заметить, что метод <code>pack_*</code> принимает большое количество параметров. Первым параметром должна быть ссылка на виджет, которую вы добавляете в контейнер. Вторым и третьим параметрами объявляют параметры заполнения соответственно. Последним параметром объявляют - как много единиц пространства должно быть между дочерними элементами в упаковке.</p>
 <blockquote>
 <p>To further elaborate on the expand and fill parameters, expand defines whether the
@@ -114,7 +114,7 @@ merely use that extra space as padding.</p>
 health_info.pack_start(&amp;health_label, false, false, 5);
 health_info.pack_start(&amp;health, true, true, 5);
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/objects.html#gtklabel" id="gtklabel"><h2>GtkLabel</h2></a>
+<a class="header" href="pages/btn_boxer/objects.html#gtklabel" id="gtklabel"><h2>GtkLabel</h2></a>
 <p><strong>GtkLabel</strong> - это простой виджет, который состоит исключительно из текста. Название говорит само за себя. Всё, что вам нужно запомнить - это как создать метку(label) и изменить её.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -127,8 +127,8 @@ let horizontal_box = Box::new(Orientation::Horizontal, 5);
 horizontal_box.pack_start(&amp;information_label, false, false, 0);
 horizontal_box.pack_start(&amp;value, true, false, 0);
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/objects.html#gtkbutton" id="gtkbutton"><h2>GtkButton</h2></a>
-<a class="header" href="./pages/btn_boxer/objects.html#Создание-кнопок" id="Создание-кнопок"><h3>Создание кнопок</h3></a>
+<a class="header" href="pages/btn_boxer/objects.html#gtkbutton" id="gtkbutton"><h2>GtkButton</h2></a>
+<a class="header" href="pages/btn_boxer/objects.html#Создание-кнопок" id="Создание-кнопок"><h3>Создание кнопок</h3></a>
 <p><strong>GtkButton</strong> - это простая кнопка, содержащая текстовую метку(label) и/или изображения для представления действия, которое должно быть выполнено при нажатии кнопки.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -136,7 +136,7 @@ horizontal_box.pack_start(&amp;value, true, false, 0);
 let text_button = Button::new_with_label(&quot;Ok&quot;);
 let image_button = Button::new_from_icon_name(&quot;имя-иконки&quot;, 32);
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/objects.html#Дизайн-кнопок" id="Дизайн-кнопок"><h3>Дизайн кнопок</h3></a>
+<a class="header" href="pages/btn_boxer/objects.html#Дизайн-кнопок" id="Дизайн-кнопок"><h3>Дизайн кнопок</h3></a>
 <p>Виджеты в GTK можно оформить так, чтобы они отличались от других виджетов в пользовательском интерфейсе(UI). В частности, кнопки поддерживают два класса стилей: destructive-action, and suggested-action. Если в вашем UI есть особенная кнопка, которая должна отличаться, вы можете установить её так:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -152,13 +152,13 @@ new_button.get_style_context().map(|c| c.add_class(&quot;suggested-action&quot;)
 
                 <!-- Mobile navigation buttons -->
                 
-                    <a rel="prev" href="./pages/btn_boxer/index.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                    <a rel="prev" href="pages/btn_boxer/index.html" class="mobile-nav-chapters previous" title="Previous chapter">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a rel="next" href="./pages/btn_boxer/state.html" class="mobile-nav-chapters next" title="Next chapter">
+                    <a rel="next" href="pages/btn_boxer/state.html" class="mobile-nav-chapters next" title="Next chapter">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -166,13 +166,13 @@ new_button.get_style_context().map(|c| c.add_class(&quot;suggested-action&quot;)
             </div>
 
             
-                <a href="./pages/btn_boxer/index.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                <a href="pages/btn_boxer/index.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-left"></i>
                 </a>
             
 
             
-                <a href="./pages/btn_boxer/state.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                <a href="pages/btn_boxer/state.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
             
@@ -189,6 +189,20 @@ new_button.get_style_context().map(|c| c.add_class(&quot;suggested-action&quot;)
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 

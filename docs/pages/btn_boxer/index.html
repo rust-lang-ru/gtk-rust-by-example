@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html" class="active"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="./pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="./pages/btn_boxer/programming.html"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="pages/btn_boxer/index.html" class="active"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="pages/btn_boxer/programming.html"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -86,7 +86,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="./pages/btn_boxer/index.html#Боксирующие-кнопки" id="Боксирующие-кнопки"><h1>Боксирующие кнопки</h1></a>
+                    <a class="header" href="pages/btn_boxer/index.html#Боксирующие-кнопки" id="Боксирующие-кнопки"><h1>Боксирующие кнопки</h1></a>
 <p><img src="img/btn_boxer.png" /></p>
 <blockquote>
 <p>Исходный код программы для этой главы можно найти <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/button_boxer">здесь</a>.</p>
@@ -103,7 +103,7 @@
 поэтому, когда вам нужно передать GTK объект через несколько замыканий, вы можете
 сделать это с помощью клонирования новой ссылки.</p>
 </blockquote>
-<a class="header" href="./pages/btn_boxer/index.html#Необходимые-знания" id="Необходимые-знания"><h2>Необходимые знания</h2></a>
+<a class="header" href="pages/btn_boxer/index.html#Необходимые-знания" id="Необходимые-знания"><h2>Необходимые знания</h2></a>
 <p>Прежде чем продолжить изучение урока, убедитесь что вы понимаете что такое атомарность и атомарный счётчик ссылок (<strong>Arc</strong>). Эти понятия критически важны для возможности разделять состояние между несколькими замыканиями или потоками.
 Изучить этот вопрос можно в документации модулей <code>std::sync</code> и <code>std::sync::atomic</code>. Так же, вы можете ознакомиться с безблокировочной конкурентностью (lockless concurrency) <a href="https://assets.bitbashing.io/papers/lockless.pdf">в этом документе</a>.</p>
 
@@ -117,7 +117,7 @@
                 
 
                 
-                    <a rel="next" href="./pages/btn_boxer/objects.html" class="mobile-nav-chapters next" title="Next chapter">
+                    <a rel="next" href="pages/btn_boxer/objects.html" class="mobile-nav-chapters next" title="Next chapter">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -131,7 +131,7 @@
             
 
             
-                <a href="./pages/btn_boxer/objects.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                <a href="pages/btn_boxer/objects.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
             
@@ -148,6 +148,20 @@
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 

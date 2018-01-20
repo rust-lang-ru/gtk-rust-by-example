@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="./pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="./pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="./pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="./pages/btn_boxer/ui.html" class="active"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="./pages/btn_boxer/programming.html"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
+            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html"><strong>1.</strong> Hello World</a></li><li><a href="pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/btn_boxer/ui.html" class="active"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="pages/btn_boxer/programming.html"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -86,7 +86,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="./pages/btn_boxer/ui.html#Создание-структуры-пользовательского-интерфейса-ui" id="Создание-структуры-пользовательского-интерфейса-ui"><h1>Создание структуры пользовательского интерфейса (UI)</h1></a>
+                    <a class="header" href="pages/btn_boxer/ui.html#Создание-структуры-пользовательского-интерфейса-ui" id="Создание-структуры-пользовательского-интерфейса-ui"><h1>Создание структуры пользовательского интерфейса (UI)</h1></a>
 <p>Используя структуру предыдущей главы в качестве образца, мы можем расширить её, чтобы включить новые элементы UI, которые будем использовать в нашей программе. It is important to note that you only need to store elements that you are going to later program after the UI is constructed.</p>
 <p>В этой программе мы добавим два <strong>GtkButtons</strong> к панели заголовка и воспользуемся вертикальной и горизонтальной <strong>GtkBox</strong> с некоторыми метками (labels), чтобы отобразить информацию о текущем состоянии нашего приложения. Следующее изображение является нашей новой диаграммой структур.</p>
 <p><img src="img/btn_diagram.png" /></p>
@@ -112,7 +112,7 @@ pub struct Content {
     pub message:   Label,
 }
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/ui.html#Создание-структуры-app" id="Создание-структуры-app"><h2>Создание структуры App</h2></a>
+<a class="header" href="pages/btn_boxer/ui.html#Создание-структуры-app" id="Создание-структуры-app"><h2>Создание структуры App</h2></a>
 <p>Следуя последнему уроку, начнём с нашей структуры <strong>App</strong>. Метод <strong>new()</strong> должен принимать ссылку на <strong>&amp;HealthComponent</strong> в качестве вводимого значения в UI, later on
 down the road within our <strong>Content</strong> structure. One will note that we have added a new
 <strong>content</strong> variable of type <strong>Context</strong>, which takes that health reference.</p>
@@ -121,68 +121,78 @@ down the road within our <strong>Content</strong> structure. One will note that 
 #fn main() {
 impl App {
     fn new(health: &amp;HealthComponent) -&gt; App {
-        // Create a new top level window.
+        // Создадим новое окно с типом `Toplevel`.
         let window = Window::new(WindowType::Toplevel);
-        // Create a the headerbar and it's associated content.
+        // Создадим заголовок и связанное с ним содержимое.
         let header = Header::new();
-        // Contains the content within the window.
+        // Расположим содержимое в окне.
         let content = Content::new(health);
 
         // Set the headerbar as the title bar widget.
         window.set_titlebar(&amp;header.container);
-        // Set the title of the window.
-        window.set_title(&quot;App Name&quot;);
-        // Set the window manager class.
-        window.set_wmclass(&quot;app-name&quot;, &quot;App name&quot;);
-        // The icon the app will display.
-        Window::set_default_icon_name(&quot;iconname&quot;);
-        // Add the content box into the window.
+        // Установим описание для окна.
+        window.set_title(&quot;Боксирующие кнопки&quot;);
+        // Установим класс для оконного менеджера.
+        window.set_wmclass(&quot;app-name&quot;, &quot;Боксирующие кнопки&quot;);
+        // Установим иконку, отображаемую приложением.
+        Window::set_default_icon_name(&quot;имя-иконки&quot;);
+        // Добавим коробку с содержимым в окно.
         window.add(&amp;content.container);
 
-        // Programs what to do when the exit button is used.
+        // Запрограммируем выход из программы при нажатии кнопки.
         window.connect_delete_event(move |_, _| {
             main_quit();
             Inhibit(false)
         });
 
-        // Return our main application state
-        App { window, header, content }
+        // Вернём состояние нашего приложения.
+        App {
+            window,
+            header,
+            content,
+        }
     }
 }
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/ui.html#Создание-header" id="Создание-header"><h2>Создание Header</h2></a>
+<a class="header" href="pages/btn_boxer/ui.html#Создание-header" id="Создание-header"><h2>Создание Header</h2></a>
 <p>Затем мы так же реализуем метод для нашего заголовка, который должен содержать два элемента <strong>GtkButtons</strong> -- кнопка удара и лечения. Также обратите внимание, что мы устанавливаем некоторые классы стилей этим кнопкам, чтобы дать им более информативную визуальную способность.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 impl Header {
     fn new() -&gt; Header {
-        // Creates the main header bar container widget.
+        // Создадим главный заголовочный бар содержащий виджет.
         let container = HeaderBar::new();
 
-        // Sets the text to display in the title section of the header bar.
-        container.set_title(&quot;App Name&quot;);
-        // Enable the window controls within this headerbar.
+        // Установим текст для отображения в секции для названия.
+        container.set_title(&quot;Боксирующие кнопки&quot;);
+        // Сделаем активными элементы управления окна в этой панели.
         container.set_show_close_button(true);
 
-        // Create the hit and heal buttons.
-        let hit = Button::new_with_label(&quot;Hit&quot;);
-        let heal = Button::new_with_label(&quot;Heal&quot;);
+        // Создадим кнопки: `ударить` и `лечить`.
+        let hit = Button::new_with_label(&quot;Ударить&quot;);
+        let heal = Button::new_with_label(&quot;Лечить&quot;);
 
-        // Add the corresponding style classes to those buttons.
-        hit.get_style_context().map(|c| c.add_class(&quot;destructive-action&quot;));
-        heal.get_style_context().map(|c| c.add_class(&quot;suggested-action&quot;));
+        // Добавим соответствующие классы стилей к этим кнопкам.
+        hit.get_style_context()
+            .map(|c| c.add_class(&quot;destructive-action&quot;));
+        heal.get_style_context()
+            .map(|c| c.add_class(&quot;suggested-action&quot;));
 
-        // THen add them to the header bar.
+        // Теперь добавим их в панель заголовка.
         container.pack_start(&amp;hit);
         container.pack_end(&amp;heal);
 
-        // Returns the header and all of it's state
-        Header { container, hit, heal }
+        // Вернём the header and all of it's state
+        Header {
+            container,
+            hit,
+            heal,
+        }
     }
 }
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/ui.html#Создание-content" id="Создание-content"><h2>Создание Content</h2></a>
+<a class="header" href="pages/btn_boxer/ui.html#Создание-content" id="Создание-content"><h2>Создание Content</h2></a>
 <p>Теперь пришло время создать содержимое для нашего окна. При создании своего интерфейса (UI) с древовидной диаграммой, вы почти достигните <strong>GtkBoxes</strong>. При инициализации, эта упаковка должна быть указана с <strong>Horizontal</strong> или  <strong>Vertical</strong> оринтацией.</p>
 <p>You will amost certainly reach for <strong>GtkBoxes</strong> for configuring your UI. These can be created with either a <strong>Horizontal</strong> or <strong>Vertical</strong> alignment. These boxes are where you will add all of your widgets, where they will be stacked according to the alignment of the box they are attached to.</p>
 <p>Мы должны создать вертикальную упаковку, которая содержит два дочерних элемента: вертикальный <strong>GtkBox</strong> содержащий метку (label) и значение, а затем ниже простой <strong>GtkLabel</strong>.</p>
@@ -191,44 +201,49 @@ impl Header {
 #fn main() {
 impl Content {
     fn new(health: &amp;HealthComponent) -&gt; Content {
-        // Create a vertical box to store all of it's inner children vertically.
+        // Создадим вертикальную упаковку, чтобы хранить там все дочерние элементы.
         let container = Box::new(Orientation::Vertical, 0);
 
-        // The health info will be contained within a horizontal box within the vertical box.
+        // Информация о здоровье будет храниться в горизонтальной упаковке вместе с вертикальной.
         let health_info = Box::new(Orientation::Horizontal, 0);
-        let health_label = Label::new(&quot;Current Health:&quot;);
+        let health_label = Label::new(&quot;Текущее значение здоровья:&quot;);
         let health = Label::new(health.get_health().to_string().as_str());
 
-        // Set the horizontal alignments of each of our objects.
+        // Установим горизонтальное выравнивание для наших объектов.
         health_info.set_halign(Align::Center);
         health_label.set_halign(Align::Start);
         health.set_halign(Align::Start);
 
-
-        // Add the health info box's children
+        // Добивим информацию о здоровье в дочернюю коробку.
         health_info.pack_start(&amp;health_label, false, false, 5);
         health_info.pack_start(&amp;health, true, true, 5);
 
-        // Create a message label that will later be modified by the application, upon
-        // performing a hit or heal action.
-        let message = Label::new(&quot;Hello&quot;);
+        /*
+         *   Создадим метку, которая будет изменяться приложением
+         *   при выполнении удара или лечения.
+         */
+        let message = Label::new(&quot;Привет&quot;);
 
-        // Add everything to our vertical box
+        // Добавим все в нашу вертикальную коробку.
         container.pack_start(&amp;health_info, true, false, 0);
         container.pack_start(&amp;Separator::new(Orientation::Horizontal), false, false, 0);
         container.pack_start(&amp;message, true, false, 0);
 
-        Content { container, health, message }
+        Content {
+            container,
+            health,
+            message,
+        }
     }
 }
 #}</code></pre></pre>
-<a class="header" href="./pages/btn_boxer/ui.html#Устанавливаем-выравнивание" id="Устанавливаем-выравнивание"><h3>Устанавливаем выравнивание</h3></a>
+<a class="header" href="pages/btn_boxer/ui.html#Устанавливаем-выравнивание" id="Устанавливаем-выравнивание"><h3>Устанавливаем выравнивание</h3></a>
 <p>Возможно, вы заметили, что приведённый код выше устанавливает горизонтальные выравнивания.
 По желанию, с помощью методов <code>set_halign()</code> и <code>set_valign()</code>, можно установить выравнивание для виджетов.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-// Set the horizontal alignments of each of our objects.
+// Установим горизонтальное выравнивание для наших объектов.
 health_info.set_halign(Align::Center);
 health_label.set_halign(Align::Start);
 health.set_halign(Align::Start);
@@ -238,13 +253,13 @@ health.set_halign(Align::Start);
 
                 <!-- Mobile navigation buttons -->
                 
-                    <a rel="prev" href="./pages/btn_boxer/state.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                    <a rel="prev" href="pages/btn_boxer/state.html" class="mobile-nav-chapters previous" title="Previous chapter">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a rel="next" href="./pages/btn_boxer/programming.html" class="mobile-nav-chapters next" title="Next chapter">
+                    <a rel="next" href="pages/btn_boxer/programming.html" class="mobile-nav-chapters next" title="Next chapter">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -252,13 +267,13 @@ health.set_halign(Align::Start);
             </div>
 
             
-                <a href="./pages/btn_boxer/state.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                <a href="pages/btn_boxer/state.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-left"></i>
                 </a>
             
 
             
-                <a href="./pages/btn_boxer/programming.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                <a href="pages/btn_boxer/programming.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
             
@@ -275,6 +290,20 @@ health.set_halign(Align::Start);
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 
