@@ -1,72 +1,58 @@
 # Programming the UI
 
-At this point, we can now wire everything together in the main thread. First we will set the
-default value (health value) for the state of the program. That value will be used to set
-the initial state of the GTK application structure. Then we shall program the hit and heal
-buttons, which shall change values in the content area of main window.
+На этом этапе, мы сможем соединить всё в главный поток. Сначала мы установим стандартное значение здоровья для программы. Это значение будет использоваться для инициализации состояния структуры приложения. Затем, мы напишем код для кнопки удара и лечения, которые будут должны изменять значение содержимого в главном окне.
 
-## Before We Start
+## Перед тем, как мы начнём
 
-We are going to have some predefined strings utilized based on what action was performed, and
-certain conditions of the **HealthComponents** value. To do this, we will have a **MESSAGES**
-array that we will access via a **u8**-sized enum, which will be used to get indexes into the
-array.
+В нашем распоряжении будет несколько строк, которые будут использованы взависимости от действия. Это массив **MESSAGES**, к которому мы будем обращатся с помощью кортежа с типом **u8**, который будет использован для получения индексов в массиве.
 
 ```rust
-/// Predefined messages that will be used by the UI upon certain conditions.
+// Заданные сообщения, которые будут использоваться в UI
+// при определённых условиях.
 const MESSAGES: [&str; 3] = ["Ouch! You hit me!", "...", "Thanks!"];
 
 #[repr(u8)]
-// An enum, represented as a u8, that is used as an index into the `MESSAGES` array.
+// Типаж с типом `u8`, который используется как индекс в массиве `MESSAGES`.
 enum Message { Hit, Dead, Heal }
 ```
 
-For those not yet versed in Rust, the `#[repr(u8)]` attribute defines that the following item
-should be represented as a **u8** value in memory. By default, enum variants start counting from
-zero, so **Hit** is `0`, whereas **Heal** is `2`. If you want to make this explicit, you can also
-write this as so:
+Для тех, кто плохо разбирается в Rust, атрибут `#[repr(u8)]` определяет, что следующие элементы будут представлены типом **u8** в памяти. По умолчанию, варианты для типажей начинаются с нуля, поэтому **Hit** это `0`, тогда как **Heal** это `2`. Если вы хотите сделать это явным, вы можете написать это как:
 
 ```rust
 #[repr(u8)]
 enum Message { Hit = 0, Dead = 1, Heal = 2 }
 ```
 
-## Initializing the Health Component & Application Structure
+## Инициализация компонента Health и структурирование приложения
 
-After initializing GTK, we will create our health component, which will be wrapped within an
-atomic reference-counted pointer (**Arc**). If we remember from previous code, the inner value
-is actually an **AtomicUsize**, which serves as our health counter. This value will be shared
-among multiple closures, hence the requirement for the reference counter.
+После инициализации GTK, мы можем создать наш компонент `health`, который будет обёрнут внутри атомарного счётчика (**Arc**). Если вы запомнили предыдущий код, то на самом деле внетреннее значение это **AtomicUsize**, который служит нашим счетчиком `health`. Это значение будет передаваться через несколько замыканий, следовательно требуется для счётчика ссылок.
 
 ```rust
 let health = Arc::new(HealthComponent::new(10));
 ```
 
-Using this value, we will create our application's UI structure. Note that `&health` is
-automatically referenced as an **&HealthComponent**, even though it's wrapped within an **Arc**.
+Используя это значение, мы создадим структуру UI нашего приложения. Обратите внимание, что `&health` автоматически ссылается как **&HealthComponent**, даже если завёрнуто в **Arc**.
 
 ```rust
 let app = App::new(&health);
 ```
 
-## Programming the Hit Button
+## Запрограммируем кнопку удара
 
-From here on, all we need to is to program our widgets, and this is where we will share both
-our health component, and various other UI widgets across closures. Starting with the hit button,
-we simply need to program what will happen when that button is clicked. The **ButtonExt** trait
-provides a **connect_clicked()** method for precisely that.
+Находясь здесь, всё что нам надо - это написать код наших виджетов. Именно здесь мы будем передавать оба компонента `health` и другие различные виджеты UI через замыкания. Начнём с кнопки лечения. Нам просто нужно сказать программе: "Что произойдет при нажатии на кнопку" ?
+Типаж **ButtonExt** предоставляет метод **connect_clicked()** именно для этого.
 
-> Note that widgets in GTK typically pass themselves through their closures, so if you need to
-> manipulate the calling widget, you can do so by using the assigned value passed through the
-> closure. We don't require this functionality, so we shall ignore the value.
->
+> Обратите внимание, что виджеты в GTK обычно проходят через их замыкания, поэтому, если
+> вы хотите управлять вызовом виджета, вы можете сделать это используя выбранное значение
+> через замыкание. Мы не нуждаемся в этой функциональности, поэтому просто проигнорируем
+> зачение.
 > ```rust
 > widget.connect_action(move |widget| {});
 > ```
 
 ```rust
 {
-    // Program the Hit button to subtract health.
+    // Запрограммируем кнопку `Ударить` чтобы уменьшить здоровье.
     let health = health.clone();
     let message = app.content.message.clone();
     let info = app.content.health.clone();
@@ -79,22 +65,19 @@ provides a **connect_clicked()** method for precisely that.
 }
 ```
 
-In the above, we create an anonymous scope so that we can self-contain our cloned references.
-Each invocation of **clone()** will simply increment a reference counter, and enable these values
-to be used again at a later time.
+В коде выше, мы создали анонимную область, чтобы мы могли содержать наши клонированные ссылки.
+Каждый вызов **clone()** просто увеличивает счётчик ссылок и делает значние доступным,
+чтобы использовать его еще раз позже.
 
-After subtracting from the health component, if the health is now `0`, we will return
-**Message::Dead**, otherwise the message shall be **MessageHit**. Once we have this information,
-it's just a matter of updated the labels with their new values.
+После вычитания из компонента health, если health равен `0`, то мы должны вернуть **Message::Dead**, иначе, сообщением будет **MessageHit**. После того, как мы овладели этой информацией, это просто вопрос обновления метки с новым значением.
 
-## Programming the Heal Button
+## Запрограммируем кнопку лечения
 
-This works almost identically, so we can effectively copy and paste the above code, and then
-modify it to meet our needs for this action.
+Это работает почти также, поэтому мы можем скопировать и вставить код выше, а затем изменить его, чтобы удовлетворить наши потребности.
 
 ```rust
 {
-    // Program the Heal button to restore health.
+    // Запрограммируем кнопку `Лечить`, чтобы вернуть очки здоровья.
     let health = health.clone();
     let message = app.content.message.clone();
     let info = app.content.health.clone();
@@ -106,19 +89,19 @@ modify it to meet our needs for this action.
 }
 ```
 
-## Altogether
+## В общей сложности
 
-After programming the UI, you can end the code by tacking on the following at the end:
+После программирования UI, вы можете завершить код, выполнив следующее:
 
 ```rust
-// Make all the widgets within the UI visible.
+// Сделаем все виджеты видимыми в UI.
 app.window.show_all();
 
-// Start the GTK main event loop
+// Запуск основного цикла GTK.
 gtk::main();
 ```
 
-And you should have your source code look as follows:
+Ваш исходный код должен быть таким:
 
 ```rust
 /// Predefined messages that will be used by the UI upon certain conditions.
@@ -129,21 +112,23 @@ const MESSAGES: [&str; 3] = ["Ouch! You hit me!", "...", "Thanks!"];
 enum Message { Hit, Dead, Heal }
 
 fn main() {
-    // Initialize GTK before proceeding.
+    // Инициализируем GTK перед продолжением.
     if gtk::init().is_err() {
         eprintln!("failed to initialize GTK Application");
         process::exit(1);
     }
 
-    // Set the initial state of our health component. We use an `Arc` so that we can share
-    // this value across multiple programmable closures.
+    /*  Установим начальное состояние для нашего компонента - `health`.
+     *   Воспользуемся `Arc`, для того, чтобы мы могли
+     *   использовать несколько programmable замыканий.
+     */
     let health = Arc::new(HealthComponent::new(10));
 
-    // Initialize the UI's initial state.
+    // Инициализируем начальное состояние UI.
     let app = App::new(&health);
 
     {
-        // Program the Hit button to subtract health.
+        // Запрограммируем кнопку `Ударить` чтобы уменьшить здоровье.
         let health = health.clone();
         let message = app.content.message.clone();
         let info = app.content.health.clone();
@@ -156,7 +141,7 @@ fn main() {
     }
 
     {
-        // Program the Heal button to restore health.
+        // Запрограммируем кнопку `Лечить`, чтобы вернуть очки здоровья.
         let health = health.clone();
         let message = app.content.message.clone();
         let info = app.content.health.clone();
@@ -167,10 +152,10 @@ fn main() {
         });
     }
 
-    // Make all the widgets within the UI visible.
+    // Сделаем все виджеты видимыми в UI.
     app.window.show_all();
 
-    // Start the GTK main event loop
+    // Запуск основного цикла GTK.
     gtk::main();
 }
 ```
