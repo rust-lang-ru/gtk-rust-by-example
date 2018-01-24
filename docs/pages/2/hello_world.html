@@ -7,7 +7,7 @@
         <meta name="description" content="A description">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <base href="../">
+        <base href="../../">
 
         <link rel="stylesheet" href="book.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li class="affix"><a href="pages/index.html">Введение</a></li><li><a href="pages/hello_world.html" class="active"><strong>1.</strong> Hello World</a></li><li><a href="pages/btn_boxer/index.html"><strong>2.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/btn_boxer/objects.html"><strong>2.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/btn_boxer/state.html"><strong>2.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/btn_boxer/ui.html"><strong>2.3.</strong> Создание структуры UI</a></li><li><a href="pages/btn_boxer/programming.html"><strong>2.4.</strong> Программирование UI</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="pages/1/index.html"><strong>1.</strong> Введение</a></li><li><a href="pages/2/hello_world.html" class="active"><strong>2.</strong> Hello World</a></li><li><a href="pages/3/index.html"><strong>3.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/3/objects.html"><strong>3.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/3/state.html"><strong>3.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/3/ui.html"><strong>3.3.</strong> Создание структуры UI</a></li><li><a href="pages/3/programming.html"><strong>3.4.</strong> Программирование UI</a></li><li><a href="pages/3/review.html"><strong>3.5.</strong> Заключение и обзор</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -86,13 +86,13 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="pages/hello_world.html#Окно-с-панелью-заголовка" id="Окно-с-панелью-заголовка"><h1>Окно с панелью заголовка</h1></a>
+                    <a class="header" href="pages/2/hello_world.html#Окно-с-панелью-заголовка" id="Окно-с-панелью-заголовка"><h1>Окно с панелью заголовка</h1></a>
 <p><img src="img/hello_world.png" /></p>
 <blockquote>
 <p>Исходный код программы для этой главы можно найти <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/hello_world">здесь</a>.</p>
 </blockquote>
 <p>В этой главе мы создадим простое GTK приложение с панелью заголовка. Этот пример познакомит Вас с основами создания структуры приложения, которое будет содержать виджет и окно с заголовком.</p>
-<a class="header" href="pages/hello_world.html#Создание-структуры-приложения" id="Создание-структуры-приложения"><h2>Создание структуры приложения</h2></a>
+<a class="header" href="pages/2/hello_world.html#Создание-структуры-приложения" id="Создание-структуры-приложения"><h2>Создание структуры приложения</h2></a>
 <p>Следующая диаграмма показывает, как мы будет проектировать структуру для нашего GTK приложения.
 Можно и не следовать этой диаграмме для достижения главного результата, однако, проектирование структуры пользовательского интерфейса может быть полезной пищей для ума.</p>
 <p><img src="img/diagram.png" /></p>
@@ -119,7 +119,7 @@ pub struct Header {
     pub container: HeaderBar,
 }
 #}</code></pre></pre>
-<a class="header" href="pages/hello_world.html#Создание-пользовательского-интерфейса-ui" id="Создание-пользовательского-интерфейса-ui"><h2>Создание пользовательского интерфейса (UI)</h2></a>
+<a class="header" href="pages/2/hello_world.html#Создание-пользовательского-интерфейса-ui" id="Создание-пользовательского-интерфейса-ui"><h2>Создание пользовательского интерфейса (UI)</h2></a>
 <p>Далее, мы создадим интерфейс с помощью Rust и расположим его в &quot;ново-объявленных&quot; структурах.</p>
 <p>Во-первых, структура нашего приложения будет содержать в себе все другие структуры нашего пользовательского интерфейса. В примере ниже находится код с комментариями, описывающие каждый метод, который мы будем использовать для конфигурации.</p>
 <p>Мы создадим <strong>GtkWindow</strong> и &quot;присоединим&quot; каждый элемент UI. Структура <code>Header</code> будет распологать в себе другие <strong>GtkHeaderBar</strong>. Далее, напишем функцию для выхода из приложения.
@@ -173,7 +173,7 @@ impl Header {
     }
 }
 #}</code></pre></pre>
-<a class="header" href="pages/hello_world.html#Инициализация-и-запуск-приложения" id="Инициализация-и-запуск-приложения"><h2>Инициализация и запуск приложения</h2></a>
+<a class="header" href="pages/2/hello_world.html#Инициализация-и-запуск-приложения" id="Инициализация-и-запуск-приложения"><h2>Инициализация и запуск приложения</h2></a>
 <p>Теперь, когда мы готовы, нам нужно просто инициализировать GTK, создать структуру приложения, показать все виджеты внутри этой структуры и запустить главный цикл событий GTK.</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     // Инициализация GTK.
@@ -193,7 +193,7 @@ impl Header {
 }
 </code></pre></pre>
 <p>После того, как основной поток вошёл в цикл событий, он будет взаимодействовать с каждым вызваным виджетом для действий, например: метод <code>connect_delete_event()</code>, который мы использовали выше, чтобы запрограммировать кнопку выхода для закрытия программы.</p>
-<a class="header" href="pages/hello_world.html#Результат" id="Результат"><h2>Результат</h2></a>
+<a class="header" href="pages/2/hello_world.html#Результат" id="Результат"><h2>Результат</h2></a>
 <p>После того, как вы написали код, соберите и запустите программу, которая выглядит вот так:</p>
 <pre><code class="language-bash">cargo build &amp;&amp; cargo run
 </code></pre>
@@ -203,13 +203,13 @@ impl Header {
 
                 <!-- Mobile navigation buttons -->
                 
-                    <a rel="prev" href="pages/index.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                    <a rel="prev" href="pages/1/index.html" class="mobile-nav-chapters previous" title="Previous chapter">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a rel="next" href="pages/btn_boxer/index.html" class="mobile-nav-chapters next" title="Next chapter">
+                    <a rel="next" href="pages/3/index.html" class="mobile-nav-chapters next" title="Next chapter">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -217,13 +217,13 @@ impl Header {
             </div>
 
             
-                <a href="pages/index.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                <a href="pages/1/index.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-left"></i>
                 </a>
             
 
             
-                <a href="pages/btn_boxer/index.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                <a href="pages/3/index.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
             
@@ -240,6 +240,20 @@ impl Header {
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 
