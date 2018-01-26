@@ -63,7 +63,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="pages/1/index.html"><strong>1.</strong> Введение</a></li><li><a href="pages/2/hello_world.html"><strong>2.</strong> Hello World</a></li><li><a href="pages/3/index.html"><strong>3.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/3/objects.html"><strong>3.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/3/state.html"><strong>3.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/3/ui.html"><strong>3.3.</strong> Создание структуры UI</a></li><li><a href="pages/3/programming.html"><strong>3.4.</strong> Программирование UI</a></li><li><a href="pages/3/review.html"><strong>3.5.</strong> Заключение и обзор</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="pages/1/index.html"><strong>1.</strong> Введение</a></li><li><a href="pages/2/hello_world.html"><strong>2.</strong> Hello World</a></li><li><a href="pages/3/index.html"><strong>3.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/3/objects.html"><strong>3.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/3/state.html"><strong>3.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/3/ui.html"><strong>3.3.</strong> Создание структуры UI</a></li><li><a href="pages/3/programming.html"><strong>3.4.</strong> Программирование UI</a></li><li><a href="pages/3/review.html"><strong>3.5.</strong> Заключение и обзор</a></li></ul></li><li><a href="pages/4/index.html"><strong>4.</strong> Составитель статей из HTML</a></li><li><ul class="section"><li><a href="pages/4/entries.html"><strong>4.1.</strong> Поля, панели, прокручиваемые окна</a></li><li><a href="pages/4/horrorshow.html"><strong>4.2.</strong> HTML-шаблоны Horrorshow</a></li><li><a href="pages/4/structure.html"><strong>4.3.</strong> Создание структуры UI</a></li><li><a href="pages/4/programming.html"><strong>4.4.</strong> Программирование UI</a></li><li><a href="pages/4/concl.html"><strong>4.5.</strong> Заключение и обзор</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -641,6 +641,562 @@ fn main() {
 <p>There isn't much that you can do with just buttons and labels. If you want a practice challenge, try creating a program that displays a simple random math problem, and asks the user to use buttons to set the value. If they get it correct, modify a label to tell the user that what they entered was correct. This is an incredibly annoying interface design, so don't do this in the real world!
 Bonus: Timed Answers</p>
 <p>Do the same as the above, but also take advantage of <code>gtk::timeout_add()</code> to decrement and update a timer label within the UI until the timer reaches zero.</p>
+<a class="header" href="print.html#Составитель-статей-из-html" id="Составитель-статей-из-html"><h1>Составитель статей из HTML</h1></a>
+<p><img src="https://mmstick.github.io/gtkrs-tutorials/images/ch03_complete.png" alt="head_pic" /></p>
+<blockquote>
+<p>Исходный код для этой главы находится <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/html_article">здесь</a>.</p>
+</blockquote>
+<p>В данной главе вы начнете писать полезные программы, используя поля для ввода
+и просмотра текста, для того чтобы дать возможность пользователю вводить нужные
+значения в текстовые поля и генерировать выходные значения из введенных
+значений после нажатия на кнопку. В добавок вы познакомитесь с
+макроопределением <code>html!</code>, который находится внутри пакета <em>horrorshow</em>. Вы
+будете писать программу, которая принимает введенные значения на левой панели
+и генерирует HTML на правом поле для просмотра текста.</p>
+<blockquote>
+<p>Обратите внимание на то что, что в данной главе мы не рассматриваем вопрос
+хранения данных во внешнем источнике, как это было в прошлой главе. Все состояние,
+которое нас интересует, находится внутри GTK объектов, с которыми мы будем
+взаимодействовать.</p>
+</blockquote>
+<a class="header" href="print.html#Поля-панели-прокручиваемые-окна-и-просмотр-текста" id="Поля-панели-прокручиваемые-окна-и-просмотр-текста"><h1>Поля, панели, прокручиваемые окна и просмотр текста</h1></a>
+<a class="header" href="print.html#gtkpaned" id="gtkpaned"><h2>GtkPaned</h2></a>
+<p>Это контейнеры, которые могут быть ориентированы вертикально или горизонтально,
+представляют собой два элемента, размер которых может изменяться.
+Размер этих двух элементов может быть изменен простым нажатием и перемещением
+разделяющей полосы между ними.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let container = Paned::new(Orientation::Horizontal);
+let left_widget = ...;
+let right_widget = ...;
+container.pack1(&amp;left_widget, true, true);
+container.pack2(&amp;right_widget, true, true);
+#}</code></pre></pre>
+<a class="header" href="print.html#gtkentry" id="gtkentry"><h2>GtkEntry</h2></a>
+<p>Элементы позволяют пользовательскому интерфейсу принимать строку текста как
+входное значение, что может быть использовано другими виджетами для выполнения
+некоторых действий, используя данный текст как входные данные.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let entry = Entry::new();
+entry.set_text(&quot;Some Text&quot;);
+if let Some(text) = entry.get_text() {
+    println!(&quot;{}&quot;, text);
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#gtktextview" id="gtktextview"><h2>GtkTextView</h2></a>
+<p>Текстовые панели нужны для двух вещей:</p>
+<ul>
+<li>способность показывать многострочный текст</li>
+<li>возможность пользователю вводить многострочный текст
+Текстовая панель может быть настроена так, что ее содержимое нельзя
+редактировать, если есть такая необходимость. Также есть возможность
+настраивать работу с переносами текста. Текстовые панели не умеют работать
+с форматированным текстом, однако вполне могут быть использованы как
+редактор кода. Если вы хотите, чтобы текст был показан в виде HTML, смотрите
+<strong>GtkWebView</strong>, если же вы хотите получить редактор кода, смотрите
+<strong>GtkSourceView</strong>.</li>
+</ul>
+<blockquote>
+<p>Заметьте, что часто бывает лучше создать и привязать <strong>GtkTextBuffer</strong>
+к вашему текстовому полю вручную, чтобы получить указатель на буфер,
+который вы можете хранить, и избежать непрямого обращения, когда вы
+программируете ваш пользовательский интерфейс (UI). Имея указатель на буфер,
+можно легко получить доступ к тексту, который содержится в текстовой панели.</p>
+</blockquote>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Буфер для текстовой панели с None в качестве параметра, потому что мы не
+// собираемся определять никаких текстовых тэгов для этого буфера.
+let text_buffer = TextBuffer::new(None);
+// После этого мы должны присвоить буфер новой текстовой панели, которая будет
+// самостоятельно обновлять себя при добавлении или удалении текста из буфера.
+let text_view = TextView::new_with_buffer(&amp;text_buffer);
+#}</code></pre></pre>
+<p>Извлечение текста из <strong>GtkTextBuffer</strong> требует некоторой сноровки, так что
+мы привели пример функции, которую вы можете использовать для того, чтобы
+получить содержимое буфера в виде строки (String). Вы можете указать
+определенный участок текста, который будет извлечен из буфера.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// Получить все содержимое буфера в строковом представлении.
+fn get_buffer(buffer: &amp;TextBuffer) -&gt; Option&lt;String&gt; {
+    let start = buffer.get_start_iter();
+    let end = buffer.get_end_iter();
+    buffer.get_text(&amp;start, &amp;end, true)
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#gtkscrolledwindow" id="gtkscrolledwindow"><h2>GtkScrolledWindow</h2></a>
+<p>Это одноэлементные контейнеры которые предоставляют прокручиваемые окна внутри
+них. Часто бывает удобным сочетать их вместе с текстовыми полями, которые
+возможно прокручивать. Это как раз то, что мы хотим сделать в этой главе.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let scrolled_window = ScrolledWindow::new(None, None);
+scrolled_window.add(&amp;text_view);
+#}</code></pre></pre>
+<a class="header" href="print.html#horrorshow-html-шаблоны" id="horrorshow-html-шаблоны"><h1>Horrorshow HTML-шаблоны</h1></a>
+<p>Хотя это и не связано с разработкой c использованием GTK, пакет horrorshow
+предотавляет удобные макроопределения, которые дают возможность эффективно
+генерировать HTML-строки в памяти, используя DSL (<em>domain-specific language</em>)
+совместно с Rust, который может быть запущен посредством использования символа
+(<em>sigil</em>) <code>@</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[macro_use]
+extern crate horrorshow;
+use horrorshow::helper::doctype;
+
+let title = &quot;Title&quot;;
+let content = &quot;A string\nwith multiple\n\nlines&quot;;
+let html_string = format!(
+    &quot;{}&quot;,
+    html!{
+        : doctype::HTML,
+        html {
+            head {
+                style { : &quot;#style { }&quot; }
+            }
+            body {
+                h1(id=&quot;style&quot;) { : title }
+                @ for line in content.lines().filter(|x| !x.is_empty()) {
+                    p { : line }
+                }
+            }
+        }
+    }
+);
+#}</code></pre></pre>
+<a class="header" href="print.html#Создаем-структуру-ui" id="Создаем-структуру-ui"><h1>Создаем структуру UI</h1></a>
+<p><img src="https://mmstick.github.io/gtkrs-tutorials/images/ch03_complete.png" alt="head_pic" /></p>
+<p>Используя первую главу как шаблон и расширяя его, мы должны
+продумать дизайн пользовательского интерфейса согласно нашему
+видению UI, который представлен выше.</p>
+<p>Основные элементы интерфейса, которые стоит взять на заметку - это кнопка
+<strong>Post</strong> в заголовочной панели. Внутри нашего окна содержимым содержится
+элемент <strong>title</strong>, элемент <strong>tags</strong>, текстовая панель <strong>content</strong> и
+текстовая панель <strong>right_pane</strong> для отображения текста в виде HTML-разметки.
+Таким образом, структура нашего пользовательского интерфейса выглядит так:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+pub struct App {
+    pub window: Window,
+    pub header: Header,
+    pub content: Content,
+}
+
+pub struct Header {
+    pub container: HeaderBar,
+    pub post: Button
+}
+
+pub struct Content {
+    pub container: Paned,
+    pub title: Entry,
+    pub tags: Entry,
+    pub content: TextBuffer,
+    pub right_pane: TextBuffer,
+}
+#}</code></pre></pre>
+<p>Заметьте, что контейнер для нашего содержимого будет расположен не в <strong>GtkBox</strong>,
+а в <strong>GtkPaned</strong>. Это позволит пользователю перемещать разграничительную полосу
+между панелями для того чтобы менять размер панелей по своему усмотрению.
+В добавок поля <strong>content</strong> и <strong>right_pane</strong> хранятся как <strong>GtkTextBuffer</strong>,
+а не как <strong>GtkTextViews</strong>. Это потому, что мы не будет программировать
+панели для просмотра, но будем использовать лежащие в их основе текстовые
+буферы, которые связаны с этими панелями.</p>
+<a class="header" href="print.html#Написание-программы" id="Написание-программы"><h2>Написание программы</h2></a>
+<p>Новым здесь будет то, что мы определим для окон размер по умолчанию, потому
+что мы должны иметь разумный размер, с которым пользователь будет
+взаимодействовать по умолчанию, чтобы пользователю не приходилось менять размер
+окна, чтобы удобнее обозревать его содержимое. Мы также изменяем заголовок на
+&quot;HTML Articler&quot;. Кроме этого, все остально должно быть похоже на то, как вы
+разрабатываете другие приложения.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl App {
+    fn new() -&gt; App {
+        // Создадим новое окно верхнего уровня.
+        let window = Window::new(WindowType::Toplevel);
+        // Создадим заголовочную панель и связанное с ней содержимое.
+        let header = Header::new();
+        // Создадим элемент для хранения содержимого.
+        let content = Content::new();
+
+        // Сделаем заголовочную панель виджетом в панели с названием.
+        window.set_titlebar(&amp;header.container);
+        // Установим название окна.
+        window.set_title(&quot;HTML Articler&quot;);
+        // Установим управляющий класс для окна.
+        window.set_wmclass(&quot;html-articler&quot;, &quot;HTML Articler&quot;);
+        // Иконка, которую программа будет показывать.
+        Window::set_default_icon_name(&quot;iconname&quot;);
+        // Установить размер окна по умолчанию.
+        window.set_default_size(800, 600);
+        // Добавим содержимое в окно.
+        window.add(&amp;content.container);
+
+        // Запрограммируем, что делать, когда нажата кнопка выхода.
+        window.connect_delete_event(move |_, _| {
+            main_quit();
+            Inhibit(false)
+        });
+
+        // Возвратим главное состояние приложения.
+        App { window, header, content }
+    }
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#Реализация-заголовка" id="Реализация-заголовка"><h2>Реализация заголовка</h2></a>
+<p>Наша заголовочная панель будет иметь кнопку с надписью <strong>Post</strong>, которая
+получит <em>CSS</em>-стиль 'suggested-action' и будет расположена в конце панели.
+Название заголовочной панели должна совпадать с именем нашего приложения.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl Header {
+    fn new() -&gt; Header {
+        // Создает контейнер для хранения виджета - заголовочной панели.
+        let container = HeaderBar::new();
+
+        // Устанавливает текст для показа в области названия в заголовочной панели.
+        container.set_title(&quot;HTML Articler&quot;);
+        // Установим элементы управления в области заголовочной панели.
+        container.set_show_close_button(true);
+
+        // Создадим кнопку, которая будет выводить HTML-статью.
+        let post = Button::new_with_label(&quot;Post&quot;);
+        post.get_style_context().map(|x| x.add_class(&quot;suggested-action&quot;));
+
+        container.pack_end(&amp;post);
+
+        // Возвратим заголовок и все его состояние.
+        Header { container, post }
+    }
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#Реализация-содержимого" id="Реализация-содержимого"><h2>Реализация содержимого</h2></a>
+<p>Это то место, где мы будет тратить большую часть нашего времени, находясь
+в приложении. Во-первых, создадим контейнер <strong>GtkPaned</strong>, который будет
+содержать левую и правую панели, размер которых изменяем. Нашей правой панелью
+будет <strong>GtkTextView</strong>, а правой будет вертикальный <strong>GtkBox</strong>. Заметьте,
+мы заинтересованы в том, чтобы получить прямой доступ к тексту внутри буфера
+панели для просмотра, так что буфер мы инициализируем перед созданием панели.
+Контейнер левой панели будет содержать отступ в <code>5</code> условных единицах,
+чтобы они не слеплялись вместе.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Главный контейнер будет содержать левую и правую панели. Левая панели
+// предназначена для пользовательского ввода, в то время как правая
+// предназначена для показа сгенерированных выходных данных.
+let container = Paned::new(Orientation::Horizontal);
+let left_pane = Box::new(Orientation::Vertical, 5);
+let right_pane = TextBuffer::new(None);
+let right_pane_view = TextView::new_with_buffer(&amp;right_pane);
+#}</code></pre></pre>
+<p>После этого мы создаем элементы <strong>title</strong> и <strong>tags</strong>, в добавок создадим
+панель <strong>content</strong>, которую мы будем использовать для построения левой панели.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Левая панель будет состоять из заголовка, элемента с тэгами и текстовой
+// панели для просмотра содержимого.
+let title = Entry::new();
+let tags = Entry::new();
+let content = TextBuffer::new(None);
+let content_view = TextView::new_with_buffer(&amp;content);
+#}</code></pre></pre>
+<p>Заметьте, мы также должны хранить размещенную по центру надпись над текстовой
+панелью <strong>content</strong>, после которой мы добавим немного заполняющего текста
+в элементах, и пояснительные подсказки, которые будут показываться, при наведении
+мыши на элементы.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Метка, которую мы будет показывать над элементом с содержимым
+// для его описания.
+let content_label = Label::new(&quot;Content&quot;);
+content_label.set_halign(Align::Center);
+
+// Показывать пользователю текстовые подсказки в полях для ввода. 
+title.set_placeholder_text(&quot;Insert Title&quot;);
+tags.set_placeholder_text(&quot;Insert Colon-Delimited Tags&quot;);
+
+// Показывать всплывающие подсказки пользователю, которые будут
+// проявляться при наведении мыши.
+title.set_tooltip_text(&quot;Insert the title of article here&quot;);
+tags.set_tooltip_markup(&quot;&lt;b&gt;tag_one&lt;/b&gt;:&lt;b&gt;tag two&lt;/b&gt;:&lt;b&gt; tag three&lt;/b&gt;&quot;);
+#}</code></pre></pre>
+<p>После этого сделаем так, чтобы текстовое поле на правой панели не разрешало
+редактирование, и оба текстовых поля должны содержать в себе текст, в которым
+переносы произведены по словам (а не по слогам).</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Правая панель не должна разрешать изменять ее содержимое, и оба редактора
+// должны производить перенос по целым словам (а не по слогам).
+right_pane_view.set_editable(false);
+right_pane_view.set_wrap_mode(WrapMode::Word);
+content_view.set_wrap_mode(WrapMode::Word);
+#}</code></pre></pre>
+<p>Сейчас мы должны переносить текстовые поля внутри <strong>GtkScrolledWindows</strong> для
+того, чтобы позволить пользователю прокручивать текст, на тот случай, если
+имеется больше текста, чем доступно места для просмотра внутри элемента.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Произвести необходимые переносы текста в прокручиваемых окнах.
+let content_scroller = ScrolledWindow::new(None, None);
+let right_pane_scrolled = ScrolledWindow::new(None, None);
+content_scroller.add(&amp;content_view);
+right_pane_scrolled.add(&amp;right_pane_view);
+#}</code></pre></pre>
+<p>Для того, чтобы улучшить пользовательский интерфейс, мы можем добавить поля и
+границы.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Настраиваем поля.
+left_pane.set_border_width(5);
+right_pane_view.set_left_margin(5);
+right_pane_view.set_right_margin(5);
+right_pane_view.set_top_margin(5);
+right_pane_view.set_bottom_margin(5);
+content_view.set_left_margin(5);
+content_view.set_right_margin(5);
+content_view.set_top_margin(5);
+content_view.set_bottom_margin(5);
+#}</code></pre></pre>
+<p>И все, что остается - поместить элеметы внутри соответствующих панелей
+и вернуть структуру <strong>Content</strong>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Сначала добавим все в левую панель.
+left_pane.pack_start(&amp;title, false, true, 0);
+left_pane.pack_start(&amp;tags, false, true, 0);
+left_pane.pack_start(&amp;content_label, false, false, 0);
+left_pane.pack_start(&amp;content_scroller, true, true, 0);
+
+// После этого добавьте правую и левую панели в контейнер.
+container.pack1(&amp;left_pane, true, true);
+container.pack2(&amp;right_pane_scrolled, true, true);
+
+Content { container, title, tags, content, right_pane }
+#}</code></pre></pre>
+<p>Собирая все вместе, мы должны получить следующую реализацию:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl Content {
+    fn new() -&gt; Content {
+        // Главный контейнер будет содержать левую и правую панели. Левая панель
+        // предназначена для пользовательского ввода, а левая панель
+        // предназначена для сгенерированных данных.
+        let container = Paned::new(Orientation::Horizontal);
+        let left_pane = Box::new(Orientation::Vertical, 5);
+        let right_pane = TextBuffer::new(None);
+        let right_pane_view = TextView::new_with_buffer(&amp;right_pane);
+
+        //Левая панель будет состоять из заголовка, элементов с тэгами и
+        // текстовой панели для просмотра содержимого.
+        let title = Entry::new();
+        let tags = Entry::new();
+        let content = TextBuffer::new(None);
+        let content_view = TextView::new_with_buffer(&amp;content);
+
+        // Метка, которую мы будем показывать над содержимым для его описания.
+        let content_label = Label::new(&quot;Content&quot;);
+        content_label.set_halign(Align::Center);
+
+        // Показывать пользователю текстовые подсказки в полях для ввода.
+        title.set_placeholder_text(&quot;Insert Title&quot;);
+        tags.set_placeholder_text(&quot;Insert Colon-Delimited Tags&quot;);
+
+        // Показывать всплывающие подсказки пользователю, которые будут
+        // проявляться при наведении мыши.
+        title.set_tooltip_text(&quot;Insert the title of article here&quot;);
+        tags.set_tooltip_markup(&quot;&lt;b&gt;tag_one&lt;/b&gt;:&lt;b&gt;tag two&lt;/b&gt;:&lt;b&gt; tag three&lt;/b&gt;&quot;);
+
+        // Правая панель не должна разрешать изменять ее содержимое, и оба редактора
+        // должны производить перенос по целым словам (а не по слогам).
+        right_pane_view.set_editable(false);
+        right_pane_view.set_wrap_mode(WrapMode::Word);
+        content_view.set_wrap_mode(WrapMode::Word);
+
+        // Произвести необходимые переносы текста в прокручиваемых окнах.
+        let content_scroller = ScrolledWindow::new(None, None);
+        let right_pane_scrolled = ScrolledWindow::new(None, None);
+        content_scroller.add(&amp;content_view);
+        right_pane_scrolled.add(&amp;right_pane_view);
+
+        // Настраиваем отступы.
+        left_pane.set_border_width(5);
+        right_pane_view.set_left_margin(5);
+        right_pane_view.set_right_margin(5);
+        right_pane_view.set_top_margin(5);
+        right_pane_view.set_bottom_margin(5);
+        content_view.set_left_margin(5);
+        content_view.set_right_margin(5);
+        content_view.set_top_margin(5);
+        content_view.set_bottom_margin(5);
+
+        // Сначала добавим все в левую панель.
+        left_pane.pack_start(&amp;title, false, true, 0);
+        left_pane.pack_start(&amp;tags, false, true, 0);
+        left_pane.pack_start(&amp;content_label, false, false, 0);
+        left_pane.pack_start(&amp;content_scroller, true, true, 0);
+
+        // После этого добавьте правую и левую панели в контейнер.
+        container.pack1(&amp;left_pane, true, true);
+        container.pack2(&amp;right_pane_scrolled, true, true);
+
+        Content { container, title, tags, content, right_pane }
+    }
+}
+#}</code></pre></pre>
+<a class="header" href="print.html#Программирование-ui-1" id="Программирование-ui-1"><h1>Программирование UI</h1></a>
+<p>Теперь, когда имеются виджеты, которые должны взаимодействовать друг с другом,
+вы можете подумать, что данная часть является небольшой, но сложной в реализации.
+Если вы так думаете, то вы полностью ошибаетесь, потому что данная часть будет
+самой легкой частью программы для реализации. Начнем с функции <code>main</code>, которую
+мы возьмем из первой главы в качестве шаблона.</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    // Инициализация GTK перед началом работы.
+    if gtk::init().is_err() {
+        eprintln!(&quot;failed to initialize GTK Application&quot;);
+        process::exit(1);
+    }
+
+    // Инициализация начального состояния пользовательского интерфейса.
+    let app = App::new();
+
+    // Напишите код работы ваших виджетов здесь.
+
+    // Сделать видимыми все виджеты пользовательского интерфейса
+    app.window.show_all();
+
+   // Запустим главный цикл событий (_event loop_) GTK.
+    gtk::main();
+}
+</code></pre></pre>
+<p>Мы запрограммируем кнопку <strong>Post</strong> так, чтобы она принимала элементы <strong>title</strong>
+и <strong>tags</strong>, также как и буфер текстовой панели <strong>content</strong>. Далее мы пропустим
+строки из этих виджетов через HTML-макроопределение <em>horrorshow</em> и напишем
+получившийся результат в текстовый буфер <strong>right_pane</strong>. Код для программирования
+кнопки выглядит так:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+{
+    // Программирование кнопки **Post** на принятие входных значений из
+    // левой панели, произведение необходимого обновление HTML-кода на
+    // правой панели. Подготовка к увеличение значения счетчиков...
+    let title = app.content.title.clone();
+    let tags = app.content.tags.clone();
+    let content = app.content.content.clone();
+    let right_pane = app.content.right_pane.clone();
+    app.header.post.connect_clicked(move |_| {
+        let inputs = (title.get_text(), tags.get_text(), get_buffer(&amp;content));
+        if let (Some(title), Some(tags), Some(content)) = inputs {
+            right_pane.set_text(&amp;generate_html(&amp;title, &amp;tags, &amp;content));
+        }
+    });
+}
+#}</code></pre></pre>
+<p>Заметьте, получить текста из элемента очень просто. Для этого нужно всего лишь
+вызвать метод <strong>get_text()</strong>, который возвращает <strong>Option<String></strong>. Получение
+текста из текстового буфера немного сложнее, поэтому вам необходимо использовать
+функцию, которая была рекомендована в начале этой главы. Эта функция написана так:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// Получить содержимое текстового буфера в виде строки.
+fn get_buffer(buffer: &amp;TextBuffer) -&gt; Option&lt;String&gt; {
+    let start = buffer.get_start_iter();
+    let end = buffer.get_end_iter();
+    buffer.get_text(&amp;start, &amp;end, true)
+}
+#}</code></pre></pre>
+<p>Вы также заметите интересный шаблон проектирования (паттерн) в Rust, которая
+сильно упростила нам проверку наличия всех входных данных при получение входных
+данных, все это произошло перед тем как что-то сделали с входными значениями.
+Синтаксис <strong>if let</strong> в Rust работает не только с шаблонами (паттернами),
+но и с кортежами (<em>tuple</em>), так что вы можете проверять несколько входных
+данных в кортеже одновременно, так же, как вы бы делали это в <strong>match</strong>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let inputs = (title.get_text(), tags.get_text(), get_buffer(&amp;content));
+if let (Some(title), Some(tags), Some(content)) = inputs {
+    right_pane.set_text(&amp;generate_html(&amp;title, &amp;tags, &amp;content));
+}
+#}</code></pre></pre>
+<p>Нам еще предстоит определить функцию <strong>generate_html</strong>, и это будет
+завершающей частью реализации приложения. Самым простым способом
+использования макроопределения <strong>html!</strong> является его подстановка в качестве
+аргумента в макроопределение <strong>format!</strong>. Наша функция будет выглядеть так,
+хотя вы вольны реализовать HTML-макроопределение по своему усмотрению.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// Генерирует HTML, который будет показан на правой панели.
+fn generate_html(title: &amp;str, tags: &amp;str, content: &amp;str) -&gt; String {
+    format!{
+        &quot;{}&quot;,
+        html!{
+            article {
+                header {
+                    h1 { : &amp;title }
+                    div(class=&quot;tags&quot;) {
+                        @ for tag in tags.split(':') {
+                            div(class=&quot;tag&quot;) { : tag }
+                        }
+                    }
+                }
+                @ for line in content.lines().filter(|x| !x.is_empty()) {
+                    p { : line }
+                }
+            }
+        }
+    }
+}
+#}</code></pre></pre>
+<p>Синтаксис приведенного выше кода должен быть довольно читаемым. Мы создаем
+пару тэгов <strong>article</strong>, которая содержит в себе пару тэгов <strong>header</strong> и
+параграф <strong>p</strong> для каждой непустой линии из входных данных, полученных из
+текстового буфера <strong>content</strong>. Внутри тэгов <strong>header</strong> есть заголовок <strong>h1</strong>,
+который использует текст из поля для ввода названия как свой текст. Также там
+есть элемент <strong>div</strong>, который содержит список тэгов, разделенных двоеточиями.
+<img src="https://mmstick.github.io/gtkrs-tutorials/images/ch03_complete.png" alt="head_pic" /></p>
+<p>Имея все это на своих местах, у вас должна получиться работающая программа,
+выглядящая как на изображении.</p>
+<a class="header" href="print.html#Заключение-и-обзор-1" id="Заключение-и-обзор-1"><h1>Заключение и обзор</h1></a>
+<p><img src="https://mmstick.github.io/gtkrs-tutorials/images/ch03_complete.png" alt="head_pic" /></p>
+<p>К данному времени у вас должно сложиться хорошее представление о том, как писать
+программы с использованием библиотеки GTK на Rust. К текущему моменту вы должны
+знать, как делать следующее:</p>
+<ul>
+<li>создавать, получать, присваивать значения объектам <strong>Label</strong></li>
+<li>создавать, получать, присваивать значения объектам <strong>Entries</strong></li>
+<li>создавать, получать, присваивать значения объектам <strong>TextBuffer</strong></li>
+<li>создавать, присваивать буферы объектам <strong>TextViews</strong></li>
+<li>создавать, настраивать стили внешнего вида, программировать объекты <strong>Button</strong></li>
+<li>присваивать элементы объектам <strong>Box</strong> и контейнерам <strong>Paned</strong></li>
+<li>устанавливать отступы и поля на виджетах</li>
+<li>работать с внешним состоянием</li>
+</ul>
+<a class="header" href="print.html#Практические-задачи" id="Практические-задачи"><h2>Практические задачи</h2></a>
 
                 </div>
 
@@ -667,20 +1223,6 @@ Bonus: Timed Answers</p>
 
         <!-- Livereload script (if served using the cli tool) -->
         
-    <script type="text/javascript">
-        var socket = new WebSocket("ws://localhost:3001");
-        socket.onmessage = function (event) {
-            if (event.data === "reload") {
-                socket.close();
-                location.reload(true); // force reload from server (not from cache)
-            }
-        };
-
-        window.onbeforeunload = function() {
-            socket.close();
-        }
-    </script>
-
 
         
 
