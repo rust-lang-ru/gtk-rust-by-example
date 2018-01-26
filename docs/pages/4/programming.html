@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Программирование UI - Gtk-Rust by Example</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A description">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="../../">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="pages/1/index.html"><strong>1.</strong> Введение</a></li><li><a href="pages/2/hello_world.html"><strong>2.</strong> Hello World</a></li><li><a href="pages/3/index.html"><strong>3.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/3/objects.html"><strong>3.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/3/state.html"><strong>3.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/3/ui.html"><strong>3.3.</strong> Создание структуры UI</a></li><li><a href="pages/3/programming.html"><strong>3.4.</strong> Программирование UI</a></li><li><a href="pages/3/review.html"><strong>3.5.</strong> Заключение и обзор</a></li></ul></li><li><a href="pages/4/index.html"><strong>4.</strong> Составитель статей из HTML</a></li><li><ul class="section"><li><a href="pages/4/entries.html"><strong>4.1.</strong> Поля, панели, прокручиваемые окна</a></li><li><a href="pages/4/horrorshow.html"><strong>4.2.</strong> HTML-шаблоны Horrorshow</a></li><li><a href="pages/4/structure.html"><strong>4.3.</strong> Создание структуры UI</a></li><li><a href="pages/4/programming.html" class="active"><strong>4.4.</strong> Программирование UI</a></li><li><a href="pages/4/concl.html"><strong>4.5.</strong> Заключение и обзор</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Gtk-Rust by Example</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="pages/4/programming.html#Программирование-ui" id="Программирование-ui"><h1>Программирование UI</h1></a>
+<p>Теперь, когда имеются виджеты, которые должны взаимодействовать друг с другом,
+вы можете подумать, что данная часть является небольшой, но сложной в реализации.
+Если вы так думаете, то вы полностью ошибаетесь, потому что данная часть будет
+самой легкой частью программы для реализации. Начнем с функции <code>main</code>, которую
+мы возьмем из первой главы в качестве шаблона.</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    // Инициализация GTK перед началом работы.
+    if gtk::init().is_err() {
+        eprintln!(&quot;failed to initialize GTK Application&quot;);
+        process::exit(1);
+    }
+
+    // Инициализация начального состояния пользовательского интерфейса.
+    let app = App::new();
+
+    // Напишите код работы ваших виджетов здесь.
+
+    // Сделать видимыми все виджеты пользовательского интерфейса
+    app.window.show_all();
+
+   // Запустим главный цикл событий (_event loop_) GTK.
+    gtk::main();
+}
+</code></pre></pre>
+<p>Мы запрограммируем кнопку <strong>Post</strong> так, чтобы она принимала элементы <strong>title</strong>
+и <strong>tags</strong>, также как и буфер текстовой панели <strong>content</strong>. Далее мы пропустим
+строки из этих виджетов через HTML-макроопределение <em>horrorshow</em> и напишем
+получившийся результат в текстовый буфер <strong>right_pane</strong>. Код для программирования
+кнопки выглядит так:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+{
+    // Программирование кнопки **Post** на принятие входных значений из
+    // левой панели, произведение необходимого обновление HTML-кода на
+    // правой панели. Подготовка к увеличение значения счетчиков...
+    let title = app.content.title.clone();
+    let tags = app.content.tags.clone();
+    let content = app.content.content.clone();
+    let right_pane = app.content.right_pane.clone();
+    app.header.post.connect_clicked(move |_| {
+        let inputs = (title.get_text(), tags.get_text(), get_buffer(&amp;content));
+        if let (Some(title), Some(tags), Some(content)) = inputs {
+            right_pane.set_text(&amp;generate_html(&amp;title, &amp;tags, &amp;content));
+        }
+    });
+}
+#}</code></pre></pre>
+<p>Заметьте, получить текста из элемента очень просто. Для этого нужно всего лишь
+вызвать метод <strong>get_text()</strong>, который возвращает <strong>Option<String></strong>. Получение
+текста из текстового буфера немного сложнее, поэтому вам необходимо использовать
+функцию, которая была рекомендована в начале этой главы. Эта функция написана так:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// Получить содержимое текстового буфера в виде строки.
+fn get_buffer(buffer: &amp;TextBuffer) -&gt; Option&lt;String&gt; {
+    let start = buffer.get_start_iter();
+    let end = buffer.get_end_iter();
+    buffer.get_text(&amp;start, &amp;end, true)
+}
+#}</code></pre></pre>
+<p>Вы также заметите интересный шаблон проектирования (паттерн) в Rust, которая
+сильно упростила нам проверку наличия всех входных данных при получение входных
+данных, все это произошло перед тем как что-то сделали с входными значениями.
+Синтаксис <strong>if let</strong> в Rust работает не только с шаблонами (паттернами),
+но и с кортежами (<em>tuple</em>), так что вы можете проверять несколько входных
+данных в кортеже одновременно, так же, как вы бы делали это в <strong>match</strong>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let inputs = (title.get_text(), tags.get_text(), get_buffer(&amp;content));
+if let (Some(title), Some(tags), Some(content)) = inputs {
+    right_pane.set_text(&amp;generate_html(&amp;title, &amp;tags, &amp;content));
+}
+#}</code></pre></pre>
+<p>Нам еще предстоит определить функцию <strong>generate_html</strong>, и это будет
+завершающей частью реализации приложения. Самым простым способом
+использования макроопределения <strong>html!</strong> является его подстановка в качестве
+аргумента в макроопределение <strong>format!</strong>. Наша функция будет выглядеть так,
+хотя вы вольны реализовать HTML-макроопределение по своему усмотрению.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// Генерирует HTML, который будет показан на правой панели.
+fn generate_html(title: &amp;str, tags: &amp;str, content: &amp;str) -&gt; String {
+    format!{
+        &quot;{}&quot;,
+        html!{
+            article {
+                header {
+                    h1 { : &amp;title }
+                    div(class=&quot;tags&quot;) {
+                        @ for tag in tags.split(':') {
+                            div(class=&quot;tag&quot;) { : tag }
+                        }
+                    }
+                }
+                @ for line in content.lines().filter(|x| !x.is_empty()) {
+                    p { : line }
+                }
+            }
+        }
+    }
+}
+#}</code></pre></pre>
+<p>Синтаксис приведенного выше кода должен быть довольно читаемым. Мы создаем
+пару тэгов <strong>article</strong>, которая содержит в себе пару тэгов <strong>header</strong> и
+параграф <strong>p</strong> для каждой непустой линии из входных данных, полученных из
+текстового буфера <strong>content</strong>. Внутри тэгов <strong>header</strong> есть заголовок <strong>h1</strong>,
+который использует текст из поля для ввода названия как свой текст. Также там
+есть элемент <strong>div</strong>, который содержит список тэгов, разделенных двоеточиями.
+<img src="https://mmstick.github.io/gtkrs-tutorials/images/ch03_complete.png" alt="head_pic" /></p>
+<p>Имея все это на своих местах, у вас должна получиться работающая программа,
+выглядящая как на изображении.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="pages/4/structure.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="pages/4/concl.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="pages/4/structure.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="pages/4/concl.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

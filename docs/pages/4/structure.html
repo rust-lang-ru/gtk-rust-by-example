@@ -1,0 +1,436 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Создание структуры UI - Gtk-Rust by Example</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A description">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="../../">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="pages/1/index.html"><strong>1.</strong> Введение</a></li><li><a href="pages/2/hello_world.html"><strong>2.</strong> Hello World</a></li><li><a href="pages/3/index.html"><strong>3.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/3/objects.html"><strong>3.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/3/state.html"><strong>3.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/3/ui.html"><strong>3.3.</strong> Создание структуры UI</a></li><li><a href="pages/3/programming.html"><strong>3.4.</strong> Программирование UI</a></li><li><a href="pages/3/review.html"><strong>3.5.</strong> Заключение и обзор</a></li></ul></li><li><a href="pages/4/index.html"><strong>4.</strong> Составитель статей из HTML</a></li><li><ul class="section"><li><a href="pages/4/entries.html"><strong>4.1.</strong> Поля, панели, прокручиваемые окна</a></li><li><a href="pages/4/horrorshow.html"><strong>4.2.</strong> HTML-шаблоны Horrorshow</a></li><li><a href="pages/4/structure.html" class="active"><strong>4.3.</strong> Создание структуры UI</a></li><li><a href="pages/4/programming.html"><strong>4.4.</strong> Программирование UI</a></li><li><a href="pages/4/concl.html"><strong>4.5.</strong> Заключение и обзор</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Gtk-Rust by Example</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="pages/4/structure.html#Создаем-структуру-ui" id="Создаем-структуру-ui"><h1>Создаем структуру UI</h1></a>
+<p><img src="https://mmstick.github.io/gtkrs-tutorials/images/ch03_complete.png" alt="head_pic" /></p>
+<p>Используя первую главу как шаблон и расширяя его, мы должны
+продумать дизайн пользовательского интерфейса согласно нашему
+видению UI, который представлен выше.</p>
+<p>Основные элементы интерфейса, которые стоит взять на заметку - это кнопка
+<strong>Post</strong> в заголовочной панели. Внутри нашего окна содержимым содержится
+элемент <strong>title</strong>, элемент <strong>tags</strong>, текстовая панель <strong>content</strong> и
+текстовая панель <strong>right_pane</strong> для отображения текста в виде HTML-разметки.
+Таким образом, структура нашего пользовательского интерфейса выглядит так:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+pub struct App {
+    pub window: Window,
+    pub header: Header,
+    pub content: Content,
+}
+
+pub struct Header {
+    pub container: HeaderBar,
+    pub post: Button
+}
+
+pub struct Content {
+    pub container: Paned,
+    pub title: Entry,
+    pub tags: Entry,
+    pub content: TextBuffer,
+    pub right_pane: TextBuffer,
+}
+#}</code></pre></pre>
+<p>Заметьте, что контейнер для нашего содержимого будет расположен не в <strong>GtkBox</strong>,
+а в <strong>GtkPaned</strong>. Это позволит пользователю перемещать разграничительную полосу
+между панелями для того чтобы менять размер панелей по своему усмотрению.
+В добавок поля <strong>content</strong> и <strong>right_pane</strong> хранятся как <strong>GtkTextBuffer</strong>,
+а не как <strong>GtkTextViews</strong>. Это потому, что мы не будет программировать
+панели для просмотра, но будем использовать лежащие в их основе текстовые
+буферы, которые связаны с этими панелями.</p>
+<a class="header" href="pages/4/structure.html#Написание-программы" id="Написание-программы"><h2>Написание программы</h2></a>
+<p>Новым здесь будет то, что мы определим для окон размер по умолчанию, потому
+что мы должны иметь разумный размер, с которым пользователь будет
+взаимодействовать по умолчанию, чтобы пользователю не приходилось менять размер
+окна, чтобы удобнее обозревать его содержимое. Мы также изменяем заголовок на
+&quot;HTML Articler&quot;. Кроме этого, все остально должно быть похоже на то, как вы
+разрабатываете другие приложения.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl App {
+    fn new() -&gt; App {
+        // Создадим новое окно верхнего уровня.
+        let window = Window::new(WindowType::Toplevel);
+        // Создадим заголовочную панель и связанное с ней содержимое.
+        let header = Header::new();
+        // Создадим элемент для хранения содержимого.
+        let content = Content::new();
+
+        // Сделаем заголовочную панель виджетом в панели с названием.
+        window.set_titlebar(&amp;header.container);
+        // Установим название окна.
+        window.set_title(&quot;HTML Articler&quot;);
+        // Установим управляющий класс для окна.
+        window.set_wmclass(&quot;html-articler&quot;, &quot;HTML Articler&quot;);
+        // Иконка, которую программа будет показывать.
+        Window::set_default_icon_name(&quot;iconname&quot;);
+        // Установить размер окна по умолчанию.
+        window.set_default_size(800, 600);
+        // Добавим содержимое в окно.
+        window.add(&amp;content.container);
+
+        // Запрограммируем, что делать, когда нажата кнопка выхода.
+        window.connect_delete_event(move |_, _| {
+            main_quit();
+            Inhibit(false)
+        });
+
+        // Возвратим главное состояние приложения.
+        App { window, header, content }
+    }
+}
+#}</code></pre></pre>
+<a class="header" href="pages/4/structure.html#Реализация-заголовка" id="Реализация-заголовка"><h2>Реализация заголовка</h2></a>
+<p>Наша заголовочная панель будет иметь кнопку с надписью <strong>Post</strong>, которая
+получит <em>CSS</em>-стиль 'suggested-action' и будет расположена в конце панели.
+Название заголовочной панели должна совпадать с именем нашего приложения.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl Header {
+    fn new() -&gt; Header {
+        // Создает контейнер для хранения виджета - заголовочной панели.
+        let container = HeaderBar::new();
+
+        // Устанавливает текст для показа в области названия в заголовочной панели.
+        container.set_title(&quot;HTML Articler&quot;);
+        // Установим элементы управления в области заголовочной панели.
+        container.set_show_close_button(true);
+
+        // Создадим кнопку, которая будет выводить HTML-статью.
+        let post = Button::new_with_label(&quot;Post&quot;);
+        post.get_style_context().map(|x| x.add_class(&quot;suggested-action&quot;));
+
+        container.pack_end(&amp;post);
+
+        // Возвратим заголовок и все его состояние.
+        Header { container, post }
+    }
+}
+#}</code></pre></pre>
+<a class="header" href="pages/4/structure.html#Реализация-содержимого" id="Реализация-содержимого"><h2>Реализация содержимого</h2></a>
+<p>Это то место, где мы будет тратить большую часть нашего времени, находясь
+в приложении. Во-первых, создадим контейнер <strong>GtkPaned</strong>, который будет
+содержать левую и правую панели, размер которых изменяем. Нашей правой панелью
+будет <strong>GtkTextView</strong>, а правой будет вертикальный <strong>GtkBox</strong>. Заметьте,
+мы заинтересованы в том, чтобы получить прямой доступ к тексту внутри буфера
+панели для просмотра, так что буфер мы инициализируем перед созданием панели.
+Контейнер левой панели будет содержать отступ в <code>5</code> условных единицах,
+чтобы они не слеплялись вместе.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Главный контейнер будет содержать левую и правую панели. Левая панели
+// предназначена для пользовательского ввода, в то время как правая
+// предназначена для показа сгенерированных выходных данных.
+let container = Paned::new(Orientation::Horizontal);
+let left_pane = Box::new(Orientation::Vertical, 5);
+let right_pane = TextBuffer::new(None);
+let right_pane_view = TextView::new_with_buffer(&amp;right_pane);
+#}</code></pre></pre>
+<p>После этого мы создаем элементы <strong>title</strong> и <strong>tags</strong>, в добавок создадим
+панель <strong>content</strong>, которую мы будем использовать для построения левой панели.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Левая панель будет состоять из заголовка, элемента с тэгами и текстовой
+// панели для просмотра содержимого.
+let title = Entry::new();
+let tags = Entry::new();
+let content = TextBuffer::new(None);
+let content_view = TextView::new_with_buffer(&amp;content);
+#}</code></pre></pre>
+<p>Заметьте, мы также должны хранить размещенную по центру надпись над текстовой
+панелью <strong>content</strong>, после которой мы добавим немного заполняющего текста
+в элементах, и пояснительные подсказки, которые будут показываться, при наведении
+мыши на элементы.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Метка, которую мы будет показывать над элементом с содержимым
+// для его описания.
+let content_label = Label::new(&quot;Content&quot;);
+content_label.set_halign(Align::Center);
+
+// Показывать пользователю текстовые подсказки в полях для ввода. 
+title.set_placeholder_text(&quot;Insert Title&quot;);
+tags.set_placeholder_text(&quot;Insert Colon-Delimited Tags&quot;);
+
+// Показывать всплывающие подсказки пользователю, которые будут
+// проявляться при наведении мыши.
+title.set_tooltip_text(&quot;Insert the title of article here&quot;);
+tags.set_tooltip_markup(&quot;&lt;b&gt;tag_one&lt;/b&gt;:&lt;b&gt;tag two&lt;/b&gt;:&lt;b&gt; tag three&lt;/b&gt;&quot;);
+#}</code></pre></pre>
+<p>После этого сделаем так, чтобы текстовое поле на правой панели не разрешало
+редактирование, и оба текстовых поля должны содержать в себе текст, в которым
+переносы произведены по словам (а не по слогам).</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Правая панель не должна разрешать изменять ее содержимое, и оба редактора
+// должны производить перенос по целым словам (а не по слогам).
+right_pane_view.set_editable(false);
+right_pane_view.set_wrap_mode(WrapMode::Word);
+content_view.set_wrap_mode(WrapMode::Word);
+#}</code></pre></pre>
+<p>Сейчас мы должны переносить текстовые поля внутри <strong>GtkScrolledWindows</strong> для
+того, чтобы позволить пользователю прокручивать текст, на тот случай, если
+имеется больше текста, чем доступно места для просмотра внутри элемента.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Произвести необходимые переносы текста в прокручиваемых окнах.
+let content_scroller = ScrolledWindow::new(None, None);
+let right_pane_scrolled = ScrolledWindow::new(None, None);
+content_scroller.add(&amp;content_view);
+right_pane_scrolled.add(&amp;right_pane_view);
+#}</code></pre></pre>
+<p>Для того, чтобы улучшить пользовательский интерфейс, мы можем добавить поля и
+границы.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Настраиваем поля.
+left_pane.set_border_width(5);
+right_pane_view.set_left_margin(5);
+right_pane_view.set_right_margin(5);
+right_pane_view.set_top_margin(5);
+right_pane_view.set_bottom_margin(5);
+content_view.set_left_margin(5);
+content_view.set_right_margin(5);
+content_view.set_top_margin(5);
+content_view.set_bottom_margin(5);
+#}</code></pre></pre>
+<p>И все, что остается - поместить элеметы внутри соответствующих панелей
+и вернуть структуру <strong>Content</strong>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Сначала добавим все в левую панель.
+left_pane.pack_start(&amp;title, false, true, 0);
+left_pane.pack_start(&amp;tags, false, true, 0);
+left_pane.pack_start(&amp;content_label, false, false, 0);
+left_pane.pack_start(&amp;content_scroller, true, true, 0);
+
+// После этого добавьте правую и левую панели в контейнер.
+container.pack1(&amp;left_pane, true, true);
+container.pack2(&amp;right_pane_scrolled, true, true);
+
+Content { container, title, tags, content, right_pane }
+#}</code></pre></pre>
+<p>Собирая все вместе, мы должны получить следующую реализацию:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl Content {
+    fn new() -&gt; Content {
+        // Главный контейнер будет содержать левую и правую панели. Левая панель
+        // предназначена для пользовательского ввода, а левая панель
+        // предназначена для сгенерированных данных.
+        let container = Paned::new(Orientation::Horizontal);
+        let left_pane = Box::new(Orientation::Vertical, 5);
+        let right_pane = TextBuffer::new(None);
+        let right_pane_view = TextView::new_with_buffer(&amp;right_pane);
+
+        //Левая панель будет состоять из заголовка, элементов с тэгами и
+        // текстовой панели для просмотра содержимого.
+        let title = Entry::new();
+        let tags = Entry::new();
+        let content = TextBuffer::new(None);
+        let content_view = TextView::new_with_buffer(&amp;content);
+
+        // Метка, которую мы будем показывать над содержимым для его описания.
+        let content_label = Label::new(&quot;Content&quot;);
+        content_label.set_halign(Align::Center);
+
+        // Показывать пользователю текстовые подсказки в полях для ввода.
+        title.set_placeholder_text(&quot;Insert Title&quot;);
+        tags.set_placeholder_text(&quot;Insert Colon-Delimited Tags&quot;);
+
+        // Показывать всплывающие подсказки пользователю, которые будут
+        // проявляться при наведении мыши.
+        title.set_tooltip_text(&quot;Insert the title of article here&quot;);
+        tags.set_tooltip_markup(&quot;&lt;b&gt;tag_one&lt;/b&gt;:&lt;b&gt;tag two&lt;/b&gt;:&lt;b&gt; tag three&lt;/b&gt;&quot;);
+
+        // Правая панель не должна разрешать изменять ее содержимое, и оба редактора
+        // должны производить перенос по целым словам (а не по слогам).
+        right_pane_view.set_editable(false);
+        right_pane_view.set_wrap_mode(WrapMode::Word);
+        content_view.set_wrap_mode(WrapMode::Word);
+
+        // Произвести необходимые переносы текста в прокручиваемых окнах.
+        let content_scroller = ScrolledWindow::new(None, None);
+        let right_pane_scrolled = ScrolledWindow::new(None, None);
+        content_scroller.add(&amp;content_view);
+        right_pane_scrolled.add(&amp;right_pane_view);
+
+        // Настраиваем отступы.
+        left_pane.set_border_width(5);
+        right_pane_view.set_left_margin(5);
+        right_pane_view.set_right_margin(5);
+        right_pane_view.set_top_margin(5);
+        right_pane_view.set_bottom_margin(5);
+        content_view.set_left_margin(5);
+        content_view.set_right_margin(5);
+        content_view.set_top_margin(5);
+        content_view.set_bottom_margin(5);
+
+        // Сначала добавим все в левую панель.
+        left_pane.pack_start(&amp;title, false, true, 0);
+        left_pane.pack_start(&amp;tags, false, true, 0);
+        left_pane.pack_start(&amp;content_label, false, false, 0);
+        left_pane.pack_start(&amp;content_scroller, true, true, 0);
+
+        // После этого добавьте правую и левую панели в контейнер.
+        container.pack1(&amp;left_pane, true, true);
+        container.pack2(&amp;right_pane_scrolled, true, true);
+
+        Content { container, title, tags, content, right_pane }
+    }
+}
+#}</code></pre></pre>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="pages/4/horrorshow.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="pages/4/programming.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="pages/4/horrorshow.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="pages/4/programming.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>
