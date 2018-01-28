@@ -87,11 +87,11 @@
 
                 <div id="content" class="content">
                     <a class="header" href="pages/3/index.html#Боксирующие-кнопки" id="Боксирующие-кнопки"><h1>Боксирующие кнопки</h1></a>
-<p><img src="img/btn_boxer.png" /></p>
+<p><img src="img/3/btn_boxer.png" /></p>
 <blockquote>
 <p>Исходный код программы для этой главы можно найти <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/button_boxer">здесь</a>.</p>
 </blockquote>
-<p>В этом разделе мы рассмотрим, как структурировать Ваш UI с помощью <code>коробок</code>(box), изменять <code>метку</code>(label) и запрограммировать нажатие по кнопке. А также, к концу вы поймёте, как:</p>
+<p>В этом разделе мы рассмотрим, как структурировать ваш UI с помощью <code>упаковок</code> (box), изменять <code>метку</code> (label) и запрограммировать нажатие по кнопке. А также, к концу вы поймёте, как:</p>
 <ol>
 <li>Добавлять дочерние элементы в панель заголовка;</li>
 <li>Добавлять классы стилей к кнопке;</li>
@@ -148,6 +148,20 @@
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 

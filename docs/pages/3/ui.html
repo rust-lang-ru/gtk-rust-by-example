@@ -87,9 +87,9 @@
 
                 <div id="content" class="content">
                     <a class="header" href="pages/3/ui.html#Создание-структуры-пользовательского-интерфейса-ui" id="Создание-структуры-пользовательского-интерфейса-ui"><h1>Создание структуры пользовательского интерфейса (UI)</h1></a>
-<p>Используя структуру предыдущей главы в качестве образца, мы можем расширить её, чтобы включить новые элементы UI, которые будем использовать в нашей программе. It is important to note that you only need to store elements that you are going to later program after the UI is constructed.</p>
-<p>В этой программе мы добавим два <strong>GtkButtons</strong> к панели заголовка и воспользуемся вертикальной и горизонтальной <strong>GtkBox</strong> с некоторыми метками (labels), чтобы отобразить информацию о текущем состоянии нашего приложения. Следующее изображение является нашей новой диаграммой структур.</p>
-<p><img src="img/btn_diagram.png" /></p>
+<p>Используя структуру предыдущей главы в качестве образца, мы можем расширить её, чтобы включить новые элементы UI, которые будем использовать в нашей программе. Важно отметить, что необходимо хранить только те элементы, которые вы собираетесь запрограммировать позже, после создания структуры UI.</p>
+<p>В этой программе мы добавим два виджета <strong>GtkButtons</strong> к панели заголовка и воспользуемся вертикальным и горизонтальным элементом <strong>GtkBox</strong> с некоторыми метками (labels), чтобы отобразить информацию о текущем состоянии нашего приложения. Следующее изображение является нашей новой диаграммой структур.</p>
+<p><img src="img/3/btn_diagram.png" /></p>
 <p>Что означает следующее в Rust:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -113,9 +113,7 @@ pub struct Content {
 }
 #}</code></pre></pre>
 <a class="header" href="pages/3/ui.html#Создание-структуры-app" id="Создание-структуры-app"><h2>Создание структуры App</h2></a>
-<p>Следуя последнему уроку, начнём с нашей структуры <strong>App</strong>. Метод <strong>new()</strong> должен принимать ссылку на <strong>&amp;HealthComponent</strong> в качестве вводимого значения в UI, later on
-down the road within our <strong>Content</strong> structure. One will note that we have added a new
-<strong>content</strong> variable of type <strong>Context</strong>, which takes that health reference.</p>
+<p>Следуя последнему уроку, начнём с нашей структуры <strong>App</strong>. Метод <strong>new()</strong> должен принимать ссылку на <strong>&amp;HealthComponent</strong> в качестве вводимого значения в UI. Заметим, что мы добавили новую переменную <strong>content</strong> типа <strong>Context</strong>, которая принимает эту ссылку на health.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -128,7 +126,7 @@ impl App {
         // Расположим содержимое в окне.
         let content = Content::new(health);
 
-        // Set the headerbar as the title bar widget.
+        // Установим панель заголовка как описание виджета.
         window.set_titlebar(&amp;header.container);
         // Установим описание для окна.
         window.set_title(&quot;Боксирующие кнопки&quot;);
@@ -194,8 +192,8 @@ impl Header {
 #}</code></pre></pre>
 <a class="header" href="pages/3/ui.html#Создание-content" id="Создание-content"><h2>Создание Content</h2></a>
 <p>Теперь пришло время создать содержимое для нашего окна. При создании своего интерфейса (UI) с древовидной диаграммой, вы почти достигните <strong>GtkBoxes</strong>. При инициализации, эта упаковка должна быть указана с <strong>Horizontal</strong> или  <strong>Vertical</strong> оринтацией.</p>
-<p>You will amost certainly reach for <strong>GtkBoxes</strong> for configuring your UI. These can be created with either a <strong>Horizontal</strong> or <strong>Vertical</strong> alignment. These boxes are where you will add all of your widgets, where they will be stacked according to the alignment of the box they are attached to.</p>
-<p>Мы должны создать вертикальную упаковку, которая содержит два дочерних элемента: вертикальный <strong>GtkBox</strong> содержащий метку (label) и значение, а затем ниже простой <strong>GtkLabel</strong>.</p>
+<p>Безусловно, вы достигните виджета <strong>GtkBoxes</strong> для настройки UI. Он может быть создан с <strong>Horizontal</strong> или <strong>Vertical</strong> выравниванием. В эти упаковки вы добавите все ваши виджеты, где они будут сложены в соответствии с выравниванием упаковки, к которой они присоединены.</p>
+<p>Мы должны создать вертикальную упаковку, которая содержит два дочерних элемента: вертикальный виджет <strong>GtkBox</strong> содержащий метку и значение, а затем ниже простой виджет <strong>GtkLabel</strong>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -290,6 +288,20 @@ health.set_halign(Align::Start);
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 

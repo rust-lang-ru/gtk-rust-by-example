@@ -94,7 +94,7 @@ version = &quot;0.3.0&quot;
 features = [&quot;v3_22&quot;]
 </code></pre>
 <a class="header" href="print.html#Окно-с-панелью-заголовка" id="Окно-с-панелью-заголовка"><h1>Окно с панелью заголовка</h1></a>
-<p><img src="img/hello_world.png" /></p>
+<p><img src="img/2/hello_world.png" /></p>
 <blockquote>
 <p>Исходный код программы для этой главы можно найти <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/hello_world">здесь</a>.</p>
 </blockquote>
@@ -102,7 +102,7 @@ features = [&quot;v3_22&quot;]
 <a class="header" href="print.html#Создание-структуры-приложения" id="Создание-структуры-приложения"><h2>Создание структуры приложения</h2></a>
 <p>Следующая диаграмма показывает, как мы будет проектировать структуру для нашего GTK приложения.
 Можно и не следовать этой диаграмме для достижения главного результата, однако, проектирование структуры пользовательского интерфейса может быть полезной пищей для ума.</p>
-<p><img src="img/diagram.png" /></p>
+<p><img src="img/2/diagram.png" /></p>
 <p>В примере ниже, мы создадим структуру с <strong>GtkWindow</strong> и <strong>Header</strong>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -204,13 +204,13 @@ impl Header {
 <p>После того, как вы написали код, соберите и запустите программу, которая выглядит вот так:</p>
 <pre><code class="language-bash">cargo build &amp;&amp; cargo run
 </code></pre>
-<p><img src="img/hello_world.png" /></p>
+<p><img src="img/2/hello_world.png" /></p>
 <a class="header" href="print.html#Боксирующие-кнопки" id="Боксирующие-кнопки"><h1>Боксирующие кнопки</h1></a>
-<p><img src="img/btn_boxer.png" /></p>
+<p><img src="img/3/btn_boxer.png" /></p>
 <blockquote>
 <p>Исходный код программы для этой главы можно найти <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/button_boxer">здесь</a>.</p>
 </blockquote>
-<p>В этом разделе мы рассмотрим, как структурировать Ваш UI с помощью <code>коробок</code>(box), изменять <code>метку</code>(label) и запрограммировать нажатие по кнопке. А также, к концу вы поймёте, как:</p>
+<p>В этом разделе мы рассмотрим, как структурировать ваш UI с помощью <code>упаковок</code> (box), изменять <code>метку</code> (label) и запрограммировать нажатие по кнопке. А также, к концу вы поймёте, как:</p>
 <ol>
 <li>Добавлять дочерние элементы в панель заголовка;</li>
 <li>Добавлять классы стилей к кнопке;</li>
@@ -228,7 +228,7 @@ impl Header {
 <a class="header" href="print.html#Упаковки-кнопки-и-метки" id="Упаковки-кнопки-и-метки"><h1>Упаковки, кнопки и метки</h1></a>
 <p>Цель этого раздела заключается в том, чтобы дать объяснение объектам, которые будут использованы до того, как мы применим их на практике в следующих разделах.</p>
 <a class="header" href="print.html#gtkbox" id="gtkbox"><h2>GtkBox</h2></a>
-<p><strong>GtkBox</strong> является фактически эквивалентом UI вектора в Rust и должена быть объявлена с помощью <strong>Orientation</strong>, который определяет, что должны ли элементы быть выровнены слева направо или сверху вниз. Для тех, кто имеет опыт разработки с современным дизайном HTML5/CSS3, <strong>GtkBox</strong> эквивалентен гибким упаковкам -- они могут расширяться на всё пространство, а виджеты, содержащиеся внутри, тоже могут расширяться в соответствии с правилами, применяемыми при дочерней упаковке.</p>
+<p><strong>GtkBox</strong> является фактически эквивалентом UI вектора в Rust и должен быть объявлен с помощью <strong>Orientation</strong>, который определяет, что должны ли элементы быть выровнены слева направо или сверху вниз. Для тех, кто имеет опыт разработки с современным дизайном HTML5/CSS3, <strong>GtkBox</strong> эквивалентен гибким упаковкам -- они могут расширяться на всё пространство, а виджеты, содержащиеся внутри, тоже могут расширяться в соответствии с правилами, применяемыми при дочерней упаковке.</p>
 <a class="header" href="print.html#Создание-упаковки" id="Создание-упаковки"><h2>Создание упаковки</h2></a>
 <p>В следующем примере, мы создадим горизонтальную и вертикальную упаковку с нулевым отступом между дочерними элементами, содержащимися в упаковке. После создания упаковки, вы можете задать виджеты, ипсользуя метод <code>pack_*</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -254,7 +254,7 @@ health_info.pack_start(&amp;health_label, false, false, 5);
 health_info.pack_start(&amp;health, true, true, 5);
 #}</code></pre></pre>
 <a class="header" href="print.html#gtklabel" id="gtklabel"><h2>GtkLabel</h2></a>
-<p><strong>GtkLabel</strong> - это простой виджет, который состоит исключительно из текста. Название говорит само за себя. Всё, что вам нужно запомнить - это как создать метку(label) и изменить её.</p>
+<p><strong>GtkLabel</strong> - это простой виджет, который состоит исключительно из текста. Название говорит само за себя. Всё, что вам нужно запомнить - это как создать метку (label) и изменить её.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -268,7 +268,7 @@ horizontal_box.pack_start(&amp;value, true, false, 0);
 #}</code></pre></pre>
 <a class="header" href="print.html#gtkbutton" id="gtkbutton"><h2>GtkButton</h2></a>
 <a class="header" href="print.html#Создание-кнопок" id="Создание-кнопок"><h3>Создание кнопок</h3></a>
-<p><strong>GtkButton</strong> - это простая кнопка, содержащая текстовую метку(label) и/или изображения для представления действия, которое должно быть выполнено при нажатии кнопки.</p>
+<p><strong>GtkButton</strong> - это простая кнопка, содержащая текстовую метку (label) и/или изображения для представления действия, которое должно быть выполнено при нажатии кнопки.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -276,7 +276,7 @@ let text_button = Button::new_with_label(&quot;Ok&quot;);
 let image_button = Button::new_from_icon_name(&quot;имя-иконки&quot;, 32);
 #}</code></pre></pre>
 <a class="header" href="print.html#Дизайн-кнопок" id="Дизайн-кнопок"><h3>Дизайн кнопок</h3></a>
-<p>Виджеты в GTK можно оформить так, чтобы они отличались от других виджетов в пользовательском интерфейсе(UI). В частности, кнопки поддерживают два класса стилей: destructive-action, and suggested-action. Если в вашем UI есть особенная кнопка, которая должна отличаться, вы можете установить её так:</p>
+<p>Виджеты в GTK можно оформить так, чтобы они отличались от других виджетов в пользовательском интерфейсе (UI). В частности, кнопки поддерживают два класса стилей: destructive-action и suggested-action. Если в вашем UI есть особенная кнопка, которая должна отличаться, вы можете установить её так:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -317,9 +317,9 @@ impl HealthComponent {
 }
 #}</code></pre></pre>
 <a class="header" href="print.html#Создание-структуры-пользовательского-интерфейса-ui" id="Создание-структуры-пользовательского-интерфейса-ui"><h1>Создание структуры пользовательского интерфейса (UI)</h1></a>
-<p>Используя структуру предыдущей главы в качестве образца, мы можем расширить её, чтобы включить новые элементы UI, которые будем использовать в нашей программе. It is important to note that you only need to store elements that you are going to later program after the UI is constructed.</p>
-<p>В этой программе мы добавим два <strong>GtkButtons</strong> к панели заголовка и воспользуемся вертикальной и горизонтальной <strong>GtkBox</strong> с некоторыми метками (labels), чтобы отобразить информацию о текущем состоянии нашего приложения. Следующее изображение является нашей новой диаграммой структур.</p>
-<p><img src="img/btn_diagram.png" /></p>
+<p>Используя структуру предыдущей главы в качестве образца, мы можем расширить её, чтобы включить новые элементы UI, которые будем использовать в нашей программе. Важно отметить, что необходимо хранить только те элементы, которые вы собираетесь запрограммировать позже, после создания структуры UI.</p>
+<p>В этой программе мы добавим два виджета <strong>GtkButtons</strong> к панели заголовка и воспользуемся вертикальным и горизонтальным элементом <strong>GtkBox</strong> с некоторыми метками (labels), чтобы отобразить информацию о текущем состоянии нашего приложения. Следующее изображение является нашей новой диаграммой структур.</p>
+<p><img src="img/3/btn_diagram.png" /></p>
 <p>Что означает следующее в Rust:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -343,9 +343,7 @@ pub struct Content {
 }
 #}</code></pre></pre>
 <a class="header" href="print.html#Создание-структуры-app" id="Создание-структуры-app"><h2>Создание структуры App</h2></a>
-<p>Следуя последнему уроку, начнём с нашей структуры <strong>App</strong>. Метод <strong>new()</strong> должен принимать ссылку на <strong>&amp;HealthComponent</strong> в качестве вводимого значения в UI, later on
-down the road within our <strong>Content</strong> structure. One will note that we have added a new
-<strong>content</strong> variable of type <strong>Context</strong>, which takes that health reference.</p>
+<p>Следуя последнему уроку, начнём с нашей структуры <strong>App</strong>. Метод <strong>new()</strong> должен принимать ссылку на <strong>&amp;HealthComponent</strong> в качестве вводимого значения в UI. Заметим, что мы добавили новую переменную <strong>content</strong> типа <strong>Context</strong>, которая принимает эту ссылку на health.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -358,7 +356,7 @@ impl App {
         // Расположим содержимое в окне.
         let content = Content::new(health);
 
-        // Set the headerbar as the title bar widget.
+        // Установим панель заголовка как описание виджета.
         window.set_titlebar(&amp;header.container);
         // Установим описание для окна.
         window.set_title(&quot;Боксирующие кнопки&quot;);
@@ -424,8 +422,8 @@ impl Header {
 #}</code></pre></pre>
 <a class="header" href="print.html#Создание-content" id="Создание-content"><h2>Создание Content</h2></a>
 <p>Теперь пришло время создать содержимое для нашего окна. При создании своего интерфейса (UI) с древовидной диаграммой, вы почти достигните <strong>GtkBoxes</strong>. При инициализации, эта упаковка должна быть указана с <strong>Horizontal</strong> или  <strong>Vertical</strong> оринтацией.</p>
-<p>You will amost certainly reach for <strong>GtkBoxes</strong> for configuring your UI. These can be created with either a <strong>Horizontal</strong> or <strong>Vertical</strong> alignment. These boxes are where you will add all of your widgets, where they will be stacked according to the alignment of the box they are attached to.</p>
-<p>Мы должны создать вертикальную упаковку, которая содержит два дочерних элемента: вертикальный <strong>GtkBox</strong> содержащий метку (label) и значение, а затем ниже простой <strong>GtkLabel</strong>.</p>
+<p>Безусловно, вы достигните виджета <strong>GtkBoxes</strong> для настройки UI. Он может быть создан с <strong>Horizontal</strong> или <strong>Vertical</strong> выравниванием. В эти упаковки вы добавите все ваши виджеты, где они будут сложены в соответствии с выравниванием упаковки, к которой они присоединены.</p>
+<p>Мы должны создать вертикальную упаковку, которая содержит два дочерних элемента: вертикальный виджет <strong>GtkBox</strong> содержащий метку и значение, а затем ниже простой виджет <strong>GtkLabel</strong>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -634,7 +632,7 @@ fn main() {
 </code></pre></pre>
 <a class="header" href="print.html#Заключение-и-обзор" id="Заключение-и-обзор"><h2>Заключение и обзор</h2></a>
 <p>Если вы нажмёте на кнопку <code>Ударить</code>, счётчик должен уменьшиться и сообщение должно измениться. Нажатие по кнопке <code>Лечить</code> должно  увеличить счётчик и также изменить сообщение.После запуска вашей программы с помощью <code>cargo run</code>, вы должны увидеть окно, которое выглядит так:</p>
-<p><img src="img/btn_boxer.png" /></p>
+<p><img src="img/3/btn_boxer.png" /></p>
 <p>На этом этапе, вы должны хорошо понимать как работают: <strong>GtkBox</strong>, <strong>GtkButton</strong> и <strong>GtkLabel</strong>. Вы можете вернуться к предыдущему разделу, чтобы ещё раз уточнить некоторые моменты.</p>
 <a class="header" href="print.html#Практическое-занятие" id="Практическое-занятие"><h2>Практическое занятие</h2></a>
 <a class="header" href="print.html#setting-inputs-w-buttons" id="setting-inputs-w-buttons"><h3>Setting Inputs w/ Buttons</h3></a>
@@ -1223,6 +1221,20 @@ fn generate_html(title: &amp;str, tags: &amp;str, content: &amp;str) -&gt; Strin
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 
