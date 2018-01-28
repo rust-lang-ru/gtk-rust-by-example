@@ -1,6 +1,6 @@
 # Окно с панелью заголовка
 
-<img src="img/hello_world.png" />
+<img src="img/2/hello_world.png" />
 
 > Исходный код программы для этой главы можно найти [здесь](https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/hello_world).
 
@@ -11,7 +11,7 @@
 Следующая диаграмма показывает, как мы будет проектировать структуру для нашего GTK приложения.
 Можно и не следовать этой диаграмме для достижения главного результата, однако, проектирование структуры пользовательского интерфейса может быть полезной пищей для ума.
 
-<img src="img/diagram.png" />
+<img src="img/2/diagram.png" />
 
 В примере ниже, мы создадим структуру с **GtkWindow** и **Header**:
 
@@ -123,4 +123,4 @@ fn main() {
 cargo build && cargo run
 ```
 
-<img src="img/hello_world.png" />
+<img src="img/2/hello_world.png" />

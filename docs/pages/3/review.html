@@ -88,7 +88,7 @@
                 <div id="content" class="content">
                     <a class="header" href="pages/3/review.html#Заключение-и-обзор" id="Заключение-и-обзор"><h2>Заключение и обзор</h2></a>
 <p>Если вы нажмёте на кнопку <code>Ударить</code>, счётчик должен уменьшиться и сообщение должно измениться. Нажатие по кнопке <code>Лечить</code> должно  увеличить счётчик и также изменить сообщение.После запуска вашей программы с помощью <code>cargo run</code>, вы должны увидеть окно, которое выглядит так:</p>
-<p><img src="img/btn_boxer.png" /></p>
+<p><img src="img/3/btn_boxer.png" /></p>
 <p>На этом этапе, вы должны хорошо понимать как работают: <strong>GtkBox</strong>, <strong>GtkButton</strong> и <strong>GtkLabel</strong>. Вы можете вернуться к предыдущему разделу, чтобы ещё раз уточнить некоторые моменты.</p>
 <a class="header" href="pages/3/review.html#Практическое-занятие" id="Практическое-занятие"><h2>Практическое занятие</h2></a>
 <a class="header" href="pages/3/review.html#setting-inputs-w-buttons" id="setting-inputs-w-buttons"><h3>Setting Inputs w/ Buttons</h3></a>
@@ -137,6 +137,20 @@ Bonus: Timed Answers</p>
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 

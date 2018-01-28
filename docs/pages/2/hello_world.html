@@ -87,7 +87,7 @@
 
                 <div id="content" class="content">
                     <a class="header" href="pages/2/hello_world.html#Окно-с-панелью-заголовка" id="Окно-с-панелью-заголовка"><h1>Окно с панелью заголовка</h1></a>
-<p><img src="img/hello_world.png" /></p>
+<p><img src="img/2/hello_world.png" /></p>
 <blockquote>
 <p>Исходный код программы для этой главы можно найти <a href="https://github.com/ruRust/gtk-rust-by-example/tree/master/src/source_code/hello_world">здесь</a>.</p>
 </blockquote>
@@ -95,7 +95,7 @@
 <a class="header" href="pages/2/hello_world.html#Создание-структуры-приложения" id="Создание-структуры-приложения"><h2>Создание структуры приложения</h2></a>
 <p>Следующая диаграмма показывает, как мы будет проектировать структуру для нашего GTK приложения.
 Можно и не следовать этой диаграмме для достижения главного результата, однако, проектирование структуры пользовательского интерфейса может быть полезной пищей для ума.</p>
-<p><img src="img/diagram.png" /></p>
+<p><img src="img/2/diagram.png" /></p>
 <p>В примере ниже, мы создадим структуру с <strong>GtkWindow</strong> и <strong>Header</strong>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -197,7 +197,7 @@ impl Header {
 <p>После того, как вы написали код, соберите и запустите программу, которая выглядит вот так:</p>
 <pre><code class="language-bash">cargo build &amp;&amp; cargo run
 </code></pre>
-<p><img src="img/hello_world.png" /></p>
+<p><img src="img/2/hello_world.png" /></p>
 
                 </div>
 
@@ -240,6 +240,20 @@ impl Header {
 
         <!-- Livereload script (if served using the cli tool) -->
         
+    <script type="text/javascript">
+        var socket = new WebSocket("ws://localhost:3001");
+        socket.onmessage = function (event) {
+            if (event.data === "reload") {
+                socket.close();
+                location.reload(true); // force reload from server (not from cache)
+            }
+        };
+
+        window.onbeforeunload = function() {
+            socket.close();
+        }
+    </script>
+
 
         
 
