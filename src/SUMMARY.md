@@ -14,4 +14,9 @@
 	- [Создание структуры UI](pages/4/structure.md)
 	- [Программирование UI](pages/4/programming.md)
 	- [Заключение и обзор](pages/4/concl.md)
-	
+- [Простой редактор Common Mark](pages/5/index.md)
+	- [Выбор файла, просмотр кода и web-страниц](pages/5/source_views.md)
+	- [Настройка модулей](pages/5/setting_modules.md)	
+	- [Модуль ui/misc.rs](pages/5/ui_misc_rs.md)
+	- [Создание структуры пользовательского интерфейса](pages/5/creating_ui_structure.md)
+	- [Работа с внешним состоянием](pages/5/external_state.md)

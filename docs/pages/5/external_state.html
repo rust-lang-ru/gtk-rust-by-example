@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Работа с внешним состоянием - Gtk-Rust by Example</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A description">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="../../">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="pages/1/index.html"><strong>1.</strong> Введение</a></li><li><a href="pages/2/hello_world.html"><strong>2.</strong> Hello World</a></li><li><a href="pages/3/index.html"><strong>3.</strong> Боксирующие кнопки</a></li><li><ul class="section"><li><a href="pages/3/objects.html"><strong>3.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/3/state.html"><strong>3.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/3/ui.html"><strong>3.3.</strong> Создание структуры UI</a></li><li><a href="pages/3/programming.html"><strong>3.4.</strong> Программирование UI</a></li><li><a href="pages/3/review.html"><strong>3.5.</strong> Заключение и обзор</a></li></ul></li><li><a href="pages/4/index.html"><strong>4.</strong> Составитель статей из HTML</a></li><li><ul class="section"><li><a href="pages/4/entries.html"><strong>4.1.</strong> Поля, панели, прокручиваемые окна</a></li><li><a href="pages/4/horrorshow.html"><strong>4.2.</strong> HTML-шаблоны Horrorshow</a></li><li><a href="pages/4/structure.html"><strong>4.3.</strong> Создание структуры UI</a></li><li><a href="pages/4/programming.html"><strong>4.4.</strong> Программирование UI</a></li><li><a href="pages/4/concl.html"><strong>4.5.</strong> Заключение и обзор</a></li></ul></li><li><a href="pages/5/index.html"><strong>5.</strong> Простой редактор Common Mark</a></li><li><ul class="section"><li><a href="pages/5/source_views.html"><strong>5.1.</strong> Выбор файла, просмотр кода и web-страниц</a></li><li><a href="pages/5/setting_modules.html"><strong>5.2.</strong> Настройка модулей</a></li><li><a href="pages/5/ui_misc_rs.html"><strong>5.3.</strong> Модуль ui/misc.rs</a></li><li><a href="pages/5/creating_ui_structure.html"><strong>5.4.</strong> Создание структуры пользовательского интерфейса</a></li><li><a href="pages/5/external_state.html" class="active"><strong>5.5.</strong> Работа с внешним состоянием</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Gtk-Rust by Example</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="pages/5/external_state.html#Работа-с-внешним-состоянием" id="Работа-с-внешним-состоянием"><h1>Работа с внешним состоянием</h1></a>
+<p>Данная часть рассматривает модуль <strong>state.rs</strong>, который будет содержать в себе
+типы, используемые для работы с не-GTK внешним состоянием. Это будет очень
+просто, потому что Markdown-редактор не хранит большой объем данных во внешнем
+хранилище.</p>
+<a class="header" href="pages/5/external_state.html#Что-нам-нужно" id="Что-нам-нужно"><h2>Что нам нужно?</h2></a>
+<p>Имеются два ключевых компонента, которые должны нас заботить в течение времени
+жизни программы</p>
+<ul>
+<li>путь к редактируемому файлу</li>
+<li>хеш-сумма содержимого файла для сравнения текущего содержимого редактора с
+содержимым файла для того чтобы знать, когда активировать/деактивировать
+кнопку <strong>Save</strong>.</li>
+</ul>
+<a class="header" href="pages/5/external_state.html#activemetadata" id="activemetadata"><h2>ActiveMetadata</h2></a>
+<p>Так появилась структура <strong>ActiveMetadata</strong>. Она содержит <strong>PathBuf</strong>,
+используемый для хранения пути к редактируемому файлу, и 64-байтный
+хеш, который будет сгенерирован функцией <strong>keccak512()</strong> из пакета
+<a href="https://docs.rs/tiny-keccak/1.4.0/tiny_keccak/fn.keccak512.html">tiny-keccak</a></p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use std::path::{Path, PathBuf};
+use tiny_keccak::keccak512;
+
+pub struct ActiveMetadata {
+    path: PathBuf,
+    sum:  [u8; 64],
+}
+#}</code></pre></pre>
+<p>Реализация методов для этого типа будет простой. Мы должны создать:</p>
+<ul>
+<li>новый экземпляр метаданных</li>
+<li>функцию для получения ссылки на путь к файлу</li>
+<li>функцию для проверки того, что хеш-сумма содержимого в редакторе такая же,
+как и хранимая в структуре, функцию для обновления значения хеш-суммы при
+сохранении файла</li>
+</ul>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+impl ActiveMetadata {
+    pub fn new(path: PathBuf, data: &amp;[u8]) -&gt; ActiveMetadata {
+        ActiveMetadata { path, sum: keccak512(data) }
+    }
+
+    pub fn get_path&lt;'a&gt;(&amp;'a self) -&gt; &amp;'a Path { &amp;self.path }
+
+    pub fn get_dir(&amp;self) -&gt; Option&lt;PathBuf&gt; { self.path.parent().map(|p| p.to_path_buf()) }
+
+    pub fn is_same_as(&amp;self, data: &amp;[u8]) -&gt; bool { &amp;keccak512(data)[..] == &amp;self.sum[..] }
+
+    pub fn set_sum(&amp;mut self, data: &amp;[u8]) { self.sum = keccak512(data); }
+}
+#}</code></pre></pre>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="pages/5/creating_ui_structure.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+
+            </div>
+
+            
+                <a href="pages/5/creating_ui_structure.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>
