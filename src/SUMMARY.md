@@ -24,3 +24,7 @@
 	- [Markdown в HTML](pages/5/markdown_to_html.md)
 	- [Обновление WebViews](pages/5/webviews.md)
 	- [Диалог выбора файла](pages/5/file_choosers.md)
+	- [Программирование кнопки Open](pages/5/programming_open_button.md)
+	- [Программирование кнопки Save](pages/5/programming_save_button.md)
+	- [Обработка сочетаний клавиш](pages/5/binding_keys.md)
+	- [Обзор и подведение итогов](pages/5/review_conclusion.md)
