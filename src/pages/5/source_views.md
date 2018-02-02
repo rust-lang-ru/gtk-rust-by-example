@@ -1,6 +1,7 @@
 # Выбор файла, просмотр кода и web-страниц
 ## GtkWebView
-![pic_gtkwebview]: https://mmstick.github.io/gtkrs-tutorials/images/web_view.png
+
+![pic_gtkwebview](https://mmstick.github.io/gtkrs-tutorials/images/web_view.png)
 
 Этот виджет, предоставляемый [webkit2gtk][], который содержит прокручиваемое
 окно и предоставляет встроенный web-движок для рендеринга HTML. Данный элемент

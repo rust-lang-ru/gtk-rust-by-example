@@ -20,3 +20,7 @@
 	- [Модуль ui/misc.rs](pages/5/ui_misc_rs.md)
 	- [Создание структуры пользовательского интерфейса](pages/5/creating_ui_structure.md)
 	- [Работа с внешним состоянием](pages/5/external_state.md)
+	- [Создание событий](pages/5/programming.md)
+	- [Markdown в HTML](pages/5/markdown_to_html.md)
+	- [Обновление WebViews](pages/5/webviews.md)
+	- [Диалог выбора файла](pages/5/file_choosers.md)
