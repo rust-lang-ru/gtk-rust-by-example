@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Программирование кнопки Save - Gtk-Rust by Example</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="A description">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="../../">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme;
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            document.querySelector('html').classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="pages/1/index.html"><strong aria-hidden="true">1.</strong> Введение</a></li><li><a href="pages/2/hello_world.html"><strong aria-hidden="true">2.</strong> Hello World</a></li><li><a href="pages/3/index.html"><strong aria-hidden="true">3.</strong> Боксирующие кнопки</a></li><li><ol class="section"><li><a href="pages/3/objects.html"><strong aria-hidden="true">3.1.</strong> Упаковки, кнопки и метки</a></li><li><a href="pages/3/state.html"><strong aria-hidden="true">3.2.</strong> Сопровождение внешнего состояния</a></li><li><a href="pages/3/ui.html"><strong aria-hidden="true">3.3.</strong> Создание структуры UI</a></li><li><a href="pages/3/programming.html"><strong aria-hidden="true">3.4.</strong> Программирование UI</a></li><li><a href="pages/3/review.html"><strong aria-hidden="true">3.5.</strong> Заключение и обзор</a></li></ol></li><li><a href="pages/4/index.html"><strong aria-hidden="true">4.</strong> Составитель статей из HTML</a></li><li><ol class="section"><li><a href="pages/4/entries.html"><strong aria-hidden="true">4.1.</strong> Поля, панели, прокручиваемые окна</a></li><li><a href="pages/4/horrorshow.html"><strong aria-hidden="true">4.2.</strong> HTML-шаблоны Horrorshow</a></li><li><a href="pages/4/structure.html"><strong aria-hidden="true">4.3.</strong> Создание структуры UI</a></li><li><a href="pages/4/programming.html"><strong aria-hidden="true">4.4.</strong> Программирование UI</a></li><li><a href="pages/4/concl.html"><strong aria-hidden="true">4.5.</strong> Заключение и обзор</a></li></ol></li><li><a href="pages/5/index.html"><strong aria-hidden="true">5.</strong> Простой редактор Common Mark</a></li><li><ol class="section"><li><a href="pages/5/source_views.html"><strong aria-hidden="true">5.1.</strong> Выбор файла, просмотр кода и web-страниц</a></li><li><a href="pages/5/setting_modules.html"><strong aria-hidden="true">5.2.</strong> Настройка модулей</a></li><li><a href="pages/5/ui_misc_rs.html"><strong aria-hidden="true">5.3.</strong> Модуль ui/misc.rs</a></li><li><a href="pages/5/creating_ui_structure.html"><strong aria-hidden="true">5.4.</strong> Создание структуры пользовательского интерфейса</a></li><li><a href="pages/5/external_state.html"><strong aria-hidden="true">5.5.</strong> Работа с внешним состоянием</a></li><li><a href="pages/5/programming.html"><strong aria-hidden="true">5.6.</strong> Создание событий</a></li><li><a href="pages/5/markdown_to_html.html"><strong aria-hidden="true">5.7.</strong> Markdown в HTML</a></li><li><a href="pages/5/webviews.html"><strong aria-hidden="true">5.8.</strong> Обновление WebViews</a></li><li><a href="pages/5/file_choosers.html"><strong aria-hidden="true">5.9.</strong> Диалог выбора файла</a></li><li><a href="pages/5/programming_open_button.html"><strong aria-hidden="true">5.10.</strong> Программирование кнопки Open</a></li><li><a href="pages/5/programming_save_button.html" class="active"><strong aria-hidden="true">5.11.</strong> Программирование кнопки Save</a></li><li><a href="pages/5/binding_keys.html"><strong aria-hidden="true">5.12.</strong> Обработка сочетаний клавиш</a></li><li><a href="pages/5/review_conclusion.html"><strong aria-hidden="true">5.13.</strong> Обзор и подведение итогов</a></li></ol></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="submenu">
+                                <li><button class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li><button class="theme" id="rust">Rust</button></li>
+                                <li><button class="theme" id="coal">Coal</button></li>
+                                <li><button class="theme" id="navy">Navy</button></li>
+                                <li><button class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                        </div>
+
+                        <h1 class="menu-title">Gtk-Rust by Example</h1>
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="pages/5/programming_save_button.html#Программирование-кнопки-save" id="Программирование-кнопки-save"><h1>Программирование кнопки Save</h1></a>
+<p>Кнопки <strong>Save</strong> и <strong>Save As</strong> имеют более сложную реализацию, частично из-за
+того, что нужно иногда менять состояние кнопки <strong>Save</strong>, а также из-за того,
+что кнопка <strong>Save</strong> не должна открывать диалоговое окно когда имеется активный
+файл - она должна немедленно сохранять его на диск.</p>
+<a class="header" href="pages/5/programming_save_button.html#appsave_event" id="appsave_event"><h2>App:save_event()</h2></a>
+<p>Объявим метод <strong>App::save_event()</strong>, который мы будем использовать в методе
+<strong>App::connect_events()</strong> и поместим детали реализации в функцию <strong>save()</strong>
+модуля <strong>save.rs</strong>.</p>
+<p>Ключевые параметры, которые нам нужны:</p>
+<ul>
+<li>параметр <strong>save_button</strong>, который мы будем программировать.</li>
+<li>кнопка <strong>Save</strong>, с именем <strong>actual_button</strong>.</li>
+<li>доступ к <strong>ActiveMetadata</strong> текущего файла.</li>
+<li>обозначение того, является ли параметр <strong>save_button</strong> кнопкой
+<strong>Save As</strong> или нет.</li>
+</ul>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Используется для программирования кнопок **Save** и **Save As**.
+fn save_event(
+    &amp;self,
+    save_button: &amp;Button,
+    actual_button: &amp;Button,
+    current_file: Arc&lt;RwLock&lt;Option&lt;ActiveMetadata&gt;&gt;&gt;,
+    save_as: bool,
+) {
+    let editor = self.content.source.buff.clone();
+    let headerbar = self.header.container.clone();
+    let save_button = save_button.clone();
+    actual_button.connect_clicked(
+        move |_| save(&amp;editor, &amp;headerbar, &amp;save_button, &amp;current_file, save_as),
+    );
+}
+#}</code></pre></pre>
+<a class="header" href="pages/5/programming_save_button.html#Обновленный-appconnect_event" id="Обновленный-appconnect_event"><h2>Обновленный App:connect_event()</h2></a>
+<p>Далее, нужно написать метод <strong>App::connect_events()</strong> так, чтобы мы могли
+передать в него два новых метода:</p>
+<ul>
+<li>первый - программирует кнопку <strong>Save</strong>.</li>
+<li>второй - программирует кнопку <strong>Save As</strong>.</li>
+</ul>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// Создать внешнее состояние и отобразить всю функциональность UI на
+/// пользовательский интерфейс.
+pub fn connect_events(self) -&gt; ConnectedApp {
+    // Внешнее состояние, доступное для событий.
+    let current_file = Arc::new(RwLock::new(None));
+    // Отслеживать, открыта ли программа на весь экран или нет.
+    let fullscreen = Arc::new(AtomicBool::new(false));
+
+    {
+        let save = &amp;self.header.save;
+        let save_as = &amp;self.header.save_as;
+
+        // Присоединить все события, который наш пользовательский интерфейс
+        // будет обрабатывать.
+        self.editor_changed(current_file.clone(), &amp;save.clone());
+        self.open_file(current_file.clone());
+        self.save_event(&amp;save.clone(), &amp;save.clone(), current_file.clone(), false);
+        self.save_event(&amp;save, &amp;save_as, current_file.clone(), true);
+    }
+
+    // Обернуть `ConnectedApp` вокруг `App` для того, чтобы дать возможность
+    // разработчику выполнять программу.
+    ConnectedApp(self)
+}
+#}</code></pre></pre>
+<a class="header" href="pages/5/programming_save_button.html#Реализация-модуля-savers" id="Реализация-модуля-savers"><h3>Реализация модуля <strong>save.rs</strong></h3></a>
+<p>Начнём с добавления необходимых импортов:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use super::SaveDialog;
+use super::misc::*;
+use gtk::*;
+use sourceview::*;
+use state::ActiveMetadata;
+use std::fs::OpenOptions;
+use std::io::{self, Write};
+use std::sync::RwLock;
+#}</code></pre></pre>
+<p>Мы хотим знать, был ли сохранён новый файл, перезаписан ли текущий или
+сохранение было прервано.Создадим перечисление для представления различных
+состояний:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+pub enum SaveAction {
+    New(ActiveMetadata),
+    Saved,
+    Canceled,
+}
+#}</code></pre></pre>
+<a class="header" href="pages/5/programming_save_button.html#Запись-данных-и-получение-saveaction" id="Запись-данных-и-получение-saveaction"><h2>Запись данных и получение SaveAction</h2></a>
+<p>Приватная функция <strong>write_data()</strong> будет использована для записи данного
+буфера (<strong>data</strong>) в файл и оповещения о результате действия по сохранению
+файла. Если это была кнопка <strong>Save</strong> и сейчас существует <strong>ActiveMetadata</strong>,
+тогда данные будут просто записаны в существующий файл и возвращен
+<strong>Ok(SaveAction::Saved)</strong>.</p>
+<p>В противном случае, если была нажата кнопка <strong>Save As</strong>, или была нажата
+кнопка <strong>Save</strong>, но не было <strong>ActiveMetadata</strong>, тогда будет запущен
+<strong>SaveDialog</strong> для получения нового файла и возвращения
+<strong>Ok(SaveAction::New(ActiveMetadata))</strong>. Мы возвратим
+<strong>Ok(SaveAction::Cancelled)</strong>, если пользователь нажал на кнопку отмены в
+диалоговом окне.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// Сохраняет данные в файл, находящийся по предоставленному пути. Если путь
+/// является **None**, окно сохранения файла будет запущено для получения пути
+/// от пользователя. Если будет запущено диалоговое окно, данная функция
+/// возвратит **Ok(Some(path))**, иначе - **Ok(None)**. Значение **Err**
+/// указывает на связанную с вводом/выводом ошибку, которая произошла при
+/// попытке сохранения файла. 
+fn write_data(path: Option&lt;&amp;ActiveMetadata&gt;, data: &amp;[u8]) -&gt; io::Result&lt;SaveAction&gt; {
+    if let Some(path) = path {
+        // Сохранить данные в предоставленный файл, предварительно усекая его.
+        let mut file =
+            OpenOptions::new().create(true).write(true).truncate(true).open(path.get_path())?;
+        file.write_all(&amp;data)?;
+        return Ok(SaveAction::Saved);
+    }
+    
+    let save_dialog = SaveDialog::new(None);
+    if let Some(new_path) = save_dialog.run() {
+        let mut file =
+            OpenOptions::new().create(true).write(true).truncate(false).open(&amp;new_path)?;
+        file.write_all(data)?;
+        Ok(SaveAction::New(ActiveMetadata::new(new_path, data)))
+    } else {
+        Ok(SaveAction::Canceled)
+    }
+}
+#}</code></pre></pre>
+<a class="header" href="pages/5/programming_save_button.html#Написание-функции-save" id="Написание-функции-save"><h3>Написание функции <strong>save()</strong></h3></a>
+<p>Напишем функцию <strong>save()</strong> в этом модуле. Первым шагом получим текст из
+буфера. Потом предоставим метаинформацию о файле в зависимости от того, была
+нажата кнопка <strong>Save As</strong> или <strong>Save</strong>. После этого обработает полученный
+<strong>SaveAction</strong>:</p>
+<ul>
+<li>вариант <strong>New</strong> предоставит новую метаинформацию, которую мы сохраним как
+текущую и обновим название.</li>
+<li>вариант <strong>Saved</strong> оповестит нас о том, что мы должны вычислить хеш текста,
+который был записан на диск, и обновить текущую хеш-сумму файла для отражения
+нового состояния файла.</li>
+</ul>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+pub fn save(
+    editor: &amp;Buffer,
+    headerbar: &amp;HeaderBar,
+    save: &amp;Button,
+    current_file: &amp;RwLock&lt;Option&lt;ActiveMetadata&gt;&gt;,
+    save_as: bool,
+) {
+    if let Some(text) = get_buffer(editor) {
+        // Если мы программируем кнопку **Save As**, то мы не будем
+        // использовать текущий путь. В противном случае мы сохраним текст в
+        // редакторе в находящийся по текущему пути файл, если этот путь имеется.
+        let result = if save_as {
+            write_data(None, text.as_bytes())
+        } else {
+            write_data(current_file.read().unwrap().as_ref(), text.as_bytes())
+        };
+
+        // Сейчас мы подберем соответствие к выведенному функцией **save()**
+        // результату. Мы будем обрабатывать случай, когда возвращенное
+        // значение соответствует шаблону **Ok(Some(ActiveMetadata))**,
+        // устанавливая название заголовочной панели, и путь, который мы
+        // получили, в качестве текущего файла.
+        match result {
+            Ok(SaveAction::New(file)) =&gt; {
+                // Обновить название.
+                set_title(&amp;headerbar, file.get_path());
+                if let Some(parent) = file.get_dir() {
+                    let subtitle: &amp;str = &amp;parent.to_string_lossy();
+                    headerbar.set_subtitle(subtitle);
+                }
+                let mut current_file = current_file.write().unwrap();
+                *current_file = Some(file);
+                save.set_sensitive(false);
+            }
+            Ok(SaveAction::Saved) =&gt; {
+                if let Some(ref mut current_file) = *current_file.write().unwrap() {
+                    current_file.set_sum(&amp;text.as_bytes());
+                    save.set_sensitive(false);
+                }
+            }
+            _ =&gt; (),
+        }
+    }
+}
+#}</code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="pages/5/programming_open_button.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="pages/5/binding_keys.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="pages/5/programming_open_button.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="pages/5/binding_keys.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = '_FontAwesome/css/font-awesome.css';
+                document.head.insertBefore(link, document.head.firstChild)
+            }
+        </script>
+
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>
