@@ -27,7 +27,7 @@ pub fn connect_events(self) -> ConnectedApp {
 - ссылки на панель web просмотра, так что мы сможем обновлять её после
 открытия файла.
 - ссылку на заголовочную панель, так что мы сможем обновлять название.
-- кнопку **Open**, так что мы сможем отбразить событие **connect_clicked()**
+- кнопку **Open**, так что мы сможем отобразить событие **connect_clicked()**
 на неё.
 ```rust
 fn open_file(&self, current_file: Arc<RwLock<Option<ActiveMetadata>>>) {
